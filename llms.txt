@@ -1,0 +1,25 @@
+# TeacherYo Knowledge Base
+
+> YoYo 关于 AI × 教育的个人知识库。基于公众号文章沉淀，持续更新。
+
+## 核心知识
+
+- [AI×教育 总体框架](docs/ai-education-overview.md): YoYo 对 AI 如何改变教育的完整理解，先读这个
+- [核心教学理念](docs/teaching-philosophy.md): 从所有文章中提炼的教学信念和方法论
+- [常用观点与金句](docs/viewpoints-and-quotes.md): 高频引用的观点、金句、类比
+- [高数据文章数据采集](docs/data-insights.md): 传播效果好的文章及其数据表现
+
+## 主题文档
+
+（随文章解析后自然涌现，持续补充）
+
+## 原文存档
+
+- articles/ 目录下按 "日期-标题.md" 存放所有公众号文章的结构化解析
+
+## 使用说明
+
+- 需要了解 YoYo 的教育理念 → 先读 ai-education-overview.md
+- 需要引用观点或金句 → 查 viewpoints-and-quotes.md
+- 需要数据支撑 → 查 data-insights.md
+- 需要某篇具体文章 → 到 articles/ 按日期查找
