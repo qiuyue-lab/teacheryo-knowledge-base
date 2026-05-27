@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师AI黑客松 · 开场课件</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  /* Reset and base */
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+    background-color: #f4f6f9;
+    color: #333333;
+  }
+
+  /* =========================================
+     Left Panel: Sponsor Board (Responsive & Fit)
+     ========================================= */
+  .left-panel {
+    width: 28%; /* 收窄左侧宽度 */
+    height: 100vh;
+    background-color: #8b0000;
+    background-image: radial-gradient(#b71c1c 15%, transparent 16%), radial-gradient(#b71c1c 15%, transparent 16%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    padding: 3vh 1.5vw; /* 使用 vh 保证适配屏幕高度 */
+    box-sizing: border-box;
+    border-right: 4px solid #ffd700;
+  }
+
+  .board {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    border: 6px solid #ffd700;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,215,0,0.3);
+    width: 100%;
+    height: 100%; /* 占满左侧可用高度 */
+    padding: 3.5vh 1.5vw 1vh;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .board::before {
+    content: "🏆";
+    font-size: 3.5vh;
+    position: absolute;
+    top: -2.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #8b0000;
+    border-radius: 50%;
+    padding: 0.8vh;
+    border: 3px solid #ffd700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .board h1 {
+    font-family: 'Noto Serif SC', serif;
+    color: #ffd700;
+    font-size: 3.5vh;
+    margin: 1vh 0 0.5vh;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    color: #fff;
+    font-size: 1.6vh;
+    margin-bottom: 1.5vh;
+    opacity: 0.9;
+  }
+
+  .total {
+    background: #ffd700;
+    color: #c62828;
+    display: inline-block;
+    padding: 0.6vh 2vw;
+    border-radius: 30px;
+    font-size: 2vh;
+    font-weight: 900;
+    margin-bottom: 1.5vh;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+    align-self: center;
+  }
+
+  .list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 自动均匀分布，避免超出屏幕 */
+    gap: 0.5vh;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.8vh 1vw;
+    border-radius: 8px;
+    border-left: 4px solid #ffd700;
+    gap: 1vw;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .item:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .item.top {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+    border-left: none;
+    border: 2px solid #FFE082;
+    padding: 1.5vh 1.5vw;
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: scale(1.02);
+    margin-bottom: 0.5vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item.top::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shine 3s infinite;
+  }
+
+  @keyframes shine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+  }
+
+  .item.top:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #FFE082 0%, #FFB300 100%);
+  }
+
+  .name {
+    color: #fff;
+    font-size: 1.8vh;
+    font-weight: bold;
+    text-align: left;
+    flex: 1;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .item.top .name {
+    font-size: 2.6vh;
+    color: #8B0000;
+    text-shadow: none;
+    font-weight: 900;
+  }
+
+  .crown {
+    font-size: 3.5vh;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    margin-right: 0.5vw;
+    display: inline-block;
+    transform: rotate(-10deg);
+    vertical-align: middle;
+  }
+
+  .amount {
+    color: #ffd700;
+    font-size: 2vh;
+    font-weight: 900;
+    font-family: monospace;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .item.top .amount {
+    font-size: 3.2vh;
+    color: #8B0000;
+    text-shadow: none;
+  }
+
+  .footer {
+    margin-top: 1vh;
+    color: #ffd700;
+    font-size: 1.3vh;
+    opacity: 0.8;
+  }
+
+  /* =========================================
+     Right Panel: Slideshow (Bright & Vibrant)
+     ========================================= */
+  .right-panel {
+    width: 72%;
+    height: 100vh;
+    position: relative;
+    background-color: #ffffff;
+    background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+    background-size: 24px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Watermark */
+  .watermark {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    text-align: right;
+    z-index: 100;
+  }
+
+  .watermark-line1 {
+    font-size: 22px;
+    color: #1976D2; /* 鲜亮科技蓝 */
+    font-weight: 900;
+    font-family: 'Noto Serif SC', serif;
+    margin-bottom: 4px;
+  }
+
+  .watermark-line2 {
+    font-size: 32px;
+    color: #D32F2F; /* 鲜亮中国红 */
+    font-weight: 900;
+    font-family: 'Noto Serif SC', serif;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  }
+
+  .slides-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 120px 80px 40px; /* 固定顶部留白，避免标题上下跳动 */
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    transform: translateX(50px);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 顶部对齐 */
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide h2 {
+    font-size: 42px;
+    color: #D32F2F; /* 鲜亮红色标题 */
+    margin-top: 0;
+    margin-bottom: 30px;
+    border-bottom: 4px solid #FFCDD2;
+    padding-bottom: 15px;
+    font-family: 'Noto Serif SC', serif;
+    letter-spacing: 2px;
+  }
+
+  .slide p, .slide li {
+    font-size: 24px; /* 缩小字号，防止折行 */
+    line-height: 1.5;
+    margin-bottom: 12px;
+    color: #2C3E50; /* 深蓝灰色，比纯黑更现代 */
+    font-weight: 500;
+  }
+
+  .slide ul {
+    padding-left: 40px;
+  }
+
+  .slide strong {
+    color: #1976D2; /* 重点词用鲜亮蓝色 */
+  }
+
+  .slide .highlight {
+    color: #D32F2F;
+    font-weight: bold;
+    background: #FFEBEE;
+    padding: 2px 10px;
+    border-radius: 6px;
+  }
+
+  .tip-box {
+    margin-top: 30px;
+    padding: 20px 30px;
+    background: #E3F2FD;
+    border-left: 8px solid #1976D2;
+    border-radius: 8px;
+    font-size: 24px;
+    color: #0D47A1;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.1);
+  }
+
+  .tip-box.warning {
+    background: #FFF8E1;
+    border-left-color: #D32F2F;
+    color: #B71C1C;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.1);
+  }
+
+  /* Controls */
+  .controls {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    background-color: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+    z-index: 10;
+  }
+
+  .btn {
+    background-color: #1976D2;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(25, 118, 210, 0.2);
+  }
+
+  .btn:hover {
+    background-color: #1565C0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(25, 118, 210, 0.3);
+  }
+
+  .btn:disabled {
+    background-color: #E0E0E0;
+    color: #9E9E9E;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .progress {
+    font-size: 22px;
+    color: #555;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Winners Slide Specific */
+  .winners-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 0px;
+  }
+
+  .winner-row {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 8px 20px;
+    border-radius: 12px;
+    border-left: 8px solid #1976D2;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+  }
+
+  .winner-row:hover {
+    transform: translateX(10px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  .winner-row.first {
+    border-left-color: #D32F2F;
+    background: linear-gradient(90deg, #FFEBEE 0%, #ffffff 100%);
+    padding: 12px 20px;
+  }
+
+  .winner-rank {
+    font-weight: bold;
+    color: #1976D2;
+    width: 110px;
+  }
+  
+  .winner-row.first .winner-rank {
+    color: #D32F2F;
+    font-size: 28px;
+  }
+
+  .winner-name {
+    flex: 1;
+    color: #333;
+    font-weight: bold;
+    cursor: text;
+    padding: 6px 15px;
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+    transition: all 0.2s;
+    min-height: 32px;
+    background: #fafafa;
+  }
+
+  .winner-name:hover {
+    border-color: #1976D2;
+    background: #f0f7ff;
+  }
+
+  .winner-name:focus {
+    border-color: #D32F2F;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+  }
+
+  .winner-prize {
+    color: #D32F2F;
+    font-family: monospace;
+    font-size: 28px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 左侧：赞助大红榜 -->
+  <div class="left-panel">
+    <div class="board">
+      <h1>赞助大红榜</h1>
+      <div class="subtitle">感谢以下“金主们”的真金白银支持！</div>
+      <div class="total">当前总奖池：3200 元</div>
+      
+      <div class="list">
+        <div class="item top">
+          <div class="name"><span class="crown">👑</span> 深度实践Deepractice</div>
+          <div class="amount">¥ 1000</div>
+        </div>
+        <div class="item">
+          <div class="name">🔥 炎鑫</div>
+          <div class="amount">¥ 300</div>
+        </div>
+        <div class="item">
+          <div class="name" style="font-size: 1.4vh;">🚀 上海拓扑智联教育科技有限公司</div>
+          <div class="amount">¥ 300</div>
+        </div>
+        <div class="item">
+          <div class="name">💧 止水</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">🐱 金旻</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">👑 领心教育</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">🏢 教育创造社</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">😎 TeacherYo (我本人)</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">🐈 十三只猫</div>
+          <div class="amount">¥ 200</div>
+        </div>
+        <div class="item">
+          <div class="name">👨‍🏫 大卫老师</div>
+          <div class="amount">¥ 100</div>
+        </div>
+        <div class="item">
+          <div class="name">👩‍🏫 zoe老师</div>
+          <div class="amount">¥ 100</div>
+        </div>
+        <div class="item">
+          <div class="name">🔥 黄火火</div>
+          <div class="amount">¥ 100</div>
+        </div>
+        <div class="item">
+          <div class="name">✨ 凡人修AI传</div>
+          <div class="amount">¥ 100</div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        * 赞助商老板们到时也可以凭自己本事参赛拿奖金哈 ~
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧：幻灯片展示区 -->
+  <div class="right-panel">
+    
+    <!-- 右上角常驻水印 -->
+    <div class="watermark">
+      <div class="watermark-line1">TeacherYO社群</div>
+      <div class="watermark-line2">首届教师黑客松大赛</div>
+    </div>
+
+    <div class="slides-container" id="slides-container">
+      
+      <!-- Slide 1 -->
+      <div class="slide active">
+        <h2>📌 今日流程安排</h2>
+        <ul style="margin-bottom: 0;">
+          <li style="margin-bottom: 10px;"><strong>现状概览</strong>：共 17 个组，准备 10 组情境卡，同一情境最多被抽到 2 次。</li>
+          <li style="margin-bottom: 10px;"><strong>组别说明</strong>：各组不均匀，故不分组别，只看答题思路。</li>
+          <li style="margin-bottom: 10px;"><strong>官方锦囊</strong>：抽卡 30 分钟后，如果依然没有很好的答题思路，可在群内发 <span class="highlight">20元红包</span> 召唤官方锦囊！</li>
+          <li style="margin-bottom: 10px;"><strong>时间线</strong>：
+            <ul style="margin-top: 8px;">
+              <li style="margin-bottom: 8px;"><span class="highlight">2:00 - 2:15</span>：赛前说明及抽卡</li>
+              <li style="margin-bottom: 8px;"><span class="highlight">2:15 - 4:15</span>：答题时间</li>
+              <li style="margin-bottom: 8px;"><span class="highlight">4:15 - 4:30</span>：观众投票</li>
+              <li style="margin-bottom: 8px;"><span class="highlight">4:30 - 5:00</span>：优胜者展示</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="tip-box warning" style="margin-top: 10px; padding: 12px 20px;">
+          🤖 <strong>AI 使用倡议：</strong>欢迎大家使用 AI，但是不要完全依赖 AI，希望作品中能体现出你们自己的思考与创意！
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide">
+        <h2>📦 交付物规则</h2>
+        <ul>
+          <li><strong>双重交付物</strong>（缺一不可）：
+            <ul style="margin-top: 10px;">
+              <li style="margin-bottom: 10px;">① <strong>核心产物</strong>：HTML组交 <strong>HTML文件/链接</strong>；角色组和Skill组交 <strong>MD文档</strong>。</li>
+              <li style="margin-bottom: 10px;">② <strong>使用说明</strong>：所有组均需提交一份 <strong>PDF 格式的使用说明文档</strong>（类似答题思路，有演示视频更佳）。<span class="highlight" style="font-size: 20px;">以免大家玩不明白导致不给分！</span></li>
+            </ul>
+          </li>
+          <li><strong>统一命名</strong>：<br>
+            <code style="background:#f5f5f5; padding:6px 12px; border-radius:6px; color:#D32F2F; display:inline-block; margin-top:8px; font-size: 22px; border: 1px solid #e0e0e0;">[组别]第X组 - [成员昵称] - [情境/题目]</code>
+          </li>
+          <li><strong>提交纪律</strong>：<span class="highlight">请勿提前发到群里！</span>统一在答题结束时一起发送。如果提前做完，可以去围观其他组，或私信告诉我。</li>
+        </ul>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide">
+        <h2>⚖️ 评判与投票规则</h2>
+        <ul>
+          <li><strong>核心标准</strong>：答题思路和创意性，主打一个<span class="highlight">观众喜爱度</span>！</li>
+          <li><strong>投票方式</strong>：实名投票。在 <strong>Excalidraw 画板</strong> 上，找到你支持的组的框框，在里面写下你的群昵称即可完成投票。</li>
+          <li><strong>投票资格</strong>：仅支持两个群的群友，每人一票。参赛选手也可投票（可以投给自己）。没参赛的朋友也欢迎来当大众评审！</li>
+          <li><strong>投票时间</strong>：15分钟（不够的话视现场情况而定）。</li>
+        </ul>
+        <div class="tip-box">
+          💡 <strong>提示：</strong>画板可以放大写字，也欢迎在旁边留言你对作品的小心心哦！
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="slide">
+        <h2>💬 参会形式 (分组讨论)</h2>
+        <ul>
+          <li><strong>平台</strong>：腾讯会议，使用“分组讨论”功能（类似进入不同的小会议室）。</li>
+          <li><strong>准备</strong>：提前下载好腾讯会议，<strong>修改好自己的昵称</strong>（和群昵称一致）。</li>
+          <li><strong>机制</strong>：我会提前设置好 17 个分组，大家直接进入对应名称的组别即可。</li>
+          <li><strong>观摩规则</strong>：
+            <ul>
+              <li>观众朋友可以比较方便地在不同讨论组之间自由串场。</li>
+              <li><span class="highlight">串场注意素质，记得关麦</span>，没有被邀请的话不要开麦插嘴。</li>
+              <li>如果讨论者备注了“不要进”，请勿打扰；如果是开放讨论，观众也可以一起出谋划策！</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Slide 5 -->
+      <div class="slide">
+        <h2>💰 奖项与奖金分配</h2>
+        
+        <div style="background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%); border: 2px solid #FFD700; border-radius: 12px; padding: 20px 30px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,215,0,0.2);">
+          <div style="font-size: 28px; color: #D32F2F; font-weight: bold; margin-bottom: 15px; border-bottom: 2px dashed #FFCA28; padding-bottom: 10px;">
+            🏆 核心大奖（前 5 名，共 2000 元）
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 22px; color: #B71C1C;">
+            <div><strong>🥇 第 1 名：</strong><span style="font-size: 28px;">600 元</span> (最受欢迎)</div>
+            <div><strong>🥈 第 2 名：</strong><span style="font-size: 26px;">500 元</span></div>
+            <div><strong>🥉 第 3 名：</strong><span style="font-size: 26px;">400 元</span></div>
+          </div>
+          <div style="display: flex; justify-content: space-around; font-size: 22px; color: #B71C1C; margin-top: 15px;">
+            <div><strong>🏅 第 4 名：</strong><span style="font-size: 24px;">300 元</span></div>
+            <div><strong>🏅 第 5 名：</strong><span style="font-size: 24px;">200 元</span></div>
+          </div>
+        </div>
+
+        <div style="background: #E3F2FD; border: 2px solid #90CAF9; border-radius: 12px; padding: 15px 30px;">
+          <div style="font-size: 24px; color: #1976D2; font-weight: bold; margin-bottom: 10px;">
+            🌟 阳光普照参与奖（其余 12 组，共 1200 元）
+          </div>
+          <div style="font-size: 22px; color: #0D47A1;">
+            <strong>第 6 - 17 名：</strong>每组 100 元
+          </div>
+        </div>
+
+        <p style="margin-top: 20px; font-size: 18px; color: #888; text-align: center;">
+          * 赛后总结：我会写总的赛后推文，如果强烈不希望出现在文章里，提前在表格里标注。
+        </p>
+      </div>
+
+      <!-- Slide 6 -->
+      <div class="slide">
+        <h2>🏆 最终获奖名单</h2>
+        <p style="font-size: 18px; color: #666; margin-bottom: 5px;">（点击下方虚线框即可直接输入获奖团队名称）</p>
+        
+        <div class="winners-container">
+          <div class="winner-row first">
+            <div class="winner-rank">🥇 第 1 名</div>
+            <div class="winner-name" contenteditable="true" placeholder="点击输入团队名称...">点击输入团队名称...</div>
+            <div class="winner-prize">¥ 600</div>
+          </div>
+          <div class="winner-row">
+            <div class="winner-rank">🥈 第 2 名</div>
+            <div class="winner-name" contenteditable="true" placeholder="点击输入团队名称...">点击输入团队名称...</div>
+            <div class="winner-prize">¥ 500</div>
+          </div>
+          <div class="winner-row">
+            <div class="winner-rank">🥉 第 3 名</div>
+            <div class="winner-name" contenteditable="true" placeholder="点击输入团队名称...">点击输入团队名称...</div>
+            <div class="winner-prize">¥ 400</div>
+          </div>
+          <div class="winner-row">
+            <div class="winner-rank">🏅 第 4 名</div>
+            <div class="winner-name" contenteditable="true" placeholder="点击输入团队名称...">点击输入团队名称...</div>
+            <div class="winner-prize">¥ 300</div>
+          </div>
+          <div class="winner-row">
+            <div class="winner-rank">🏅 第 5 名</div>
+            <div class="winner-name" contenteditable="true" placeholder="点击输入团队名称...">点击输入团队名称...</div>
+            <div class="winner-prize">¥ 200</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 底部控制栏 -->
+    <div class="controls">
+      <button class="btn" id="prevBtn" disabled>◀ 上一页</button>
+      <div class="progress" id="progressText">1 / 6</div>
+      <button class="btn" id="nextBtn">下一页 ▶</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressText = document.getElementById('progressText');
+    let currentSlide = 0;
+
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+      progressText.textContent = `${currentSlide + 1} / ${slides.length}`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlides();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlides();
+      }
+    });
+
+    // 支持键盘左右键翻页
+    document.addEventListener('keydown', (e) => {
+      // 如果正在编辑获奖名单，不触发键盘翻页
+      if (document.activeElement.getAttribute('contenteditable') === 'true') {
+        return;
+      }
+      
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (currentSlide < slides.length - 1) {
+          currentSlide++;
+          updateSlides();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateSlides();
+        }
+      }
+    });
+
+    // 获奖名单占位符点击清空逻辑
+    const editableNames = document.querySelectorAll('.winner-name');
+    editableNames.forEach(el => {
+      el.addEventListener('focus', function() {
+        if (this.textContent === '点击输入团队名称...') {
+          this.textContent = '';
+        }
+      });
+      el.addEventListener('blur', function() {
+        if (this.textContent.trim() === '') {
+          this.textContent = '点击输入团队名称...';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

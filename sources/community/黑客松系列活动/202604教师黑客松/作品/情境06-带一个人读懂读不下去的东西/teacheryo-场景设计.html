@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>如果是 TeacherYo 来做 · 场景示范</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #f6f4ef;
+    color: #2a2a2a;
+    line-height: 1.6;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px dashed #c8c2b5;
+  }
+
+  header .eyebrow {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #8b7e5f;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  header h1 {
+    font-family: "Songti SC", "SimSun", serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1f1f1f;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  header .subtitle {
+    font-size: 15px;
+    color: #6b6b6b;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  header .subtitle b {
+    color: #b8461e;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  @media (max-width: 1000px) {
+    main { grid-template-columns: 1fr; }
+    .page { max-width: 620px; }
+  }
+
+  .scene {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 26px 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    border: 1px solid #ece8df;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scene-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .scene-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .scene-english .scene-tag {
+    background: #e3f0f5;
+    color: #2e7a9b;
+  }
+
+  .scene-wenyan .scene-tag {
+    background: #f0e8dc;
+    color: #8a5a2e;
+  }
+
+  .scene h2 {
+    font-family: "Songti SC", "SimSun", serif;
+    font-size: 22px;
+    color: #1f1f1f;
+  }
+
+  .text-sample {
+    background: #fafaf7;
+    border-left: 3px solid #d4cdb8;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .scene-english .text-sample { border-left-color: #7eb0c4; }
+  .scene-wenyan .text-sample { border-left-color: #c49a5c; }
+
+  .text-sample .label {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .text-sample .content {
+    font-size: 13.5px;
+    color: #4a4a4a;
+    line-height: 1.7;
+  }
+
+  .scene-english .text-sample .content {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+  }
+
+  .scene-wenyan .text-sample .content {
+    font-family: "Songti SC", "SimSun", serif;
+  }
+
+  .chat { flex: 1; }
+
+  .step {
+    margin-bottom: 20px;
+  }
+
+  .step-label {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #2a2a2a;
+    color: #f6f4ef;
+    font-size: 11px;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .scene-english .step-label { background: #2e7a9b; }
+  .scene-wenyan .step-label { background: #8a5a2e; }
+
+  .bubble-row {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .bubble-row.ai { justify-content: flex-start; }
+  .bubble-row.user { justify-content: flex-end; }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .bubble-row.ai .avatar {
+    background: #2a2a2a;
+    color: #fff;
+  }
+
+  .bubble-row.user .avatar {
+    background: #e8e4d8;
+    color: #6b6b6b;
+  }
+
+  .bubble {
+    max-width: 78%;
+    padding: 9px 14px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    word-break: break-word;
+  }
+
+  .bubble-row.ai .bubble {
+    background: #f1ede2;
+    color: #2a2a2a;
+    border-bottom-left-radius: 4px;
+  }
+
+  .bubble-row.user .bubble {
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  .scene-english .bubble-row.user .bubble { background: #3a8fb0; }
+  .scene-wenyan .bubble-row.user .bubble { background: #a56d35; }
+
+  .bubble em {
+    font-style: normal;
+    color: #b8461e;
+    font-weight: 600;
+  }
+
+  .scene-english .bubble em { color: #0e4f6b; }
+  .scene-wenyan .bubble em { color: #6b3810; }
+
+  .annotation {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #fdfbf4;
+    border: 1px dashed #d4cdb8;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #5a5238;
+    line-height: 1.7;
+  }
+
+  .annotation b { color: #b8461e; }
+
+  footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    letter-spacing: 1px;
+  }
+
+  footer b { color: #2a2a2a; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">HACKATHON · 情境 06 · TeacherYo 视角</div>
+    <h1>如果是我来做："带一个人读懂一篇读不下去的东西"</h1>
+    <p class="subtitle">
+      不是更花哨的游戏，也不是更强大的拆解工具，而是一个<b>陪伴者</b>——<br />
+      在他卡住的那一秒出手，只给刚够用的那一块，让他自己走完这一段。
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ===== 场景一 · 英语 ===== -->
+    <section class="scene scene-english">
+      <div class="scene-header">
+        <span class="scene-tag">SCENE 01 · 英语</span>
+      </div>
+      <h2>跟我没关系，所以读不下去</h2>
+
+      <div class="text-sample">
+        <div class="label">📖 今天要读的那篇</div>
+        <div class="content">
+          A group of scientists have been tracking rainfall patterns around the world for the past ten years. What they found surprised everyone — rainfall is shifting unpredictably...
+        </div>
+      </div>
+
+      <div class="chat">
+
+        <div class="step">
+          <div class="step-label">STEP 1 · 进入前（30 秒）</div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">你觉得今年夏天是不是<em>比以前热</em>？</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">嗯……反正挺热的</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">这篇文章里有个科学家<em>观察到了一个很奇怪的现象</em>，你能在里面找到吗？</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-label">STEP 2 · 读的过程（卡住那一秒）</div>
+          <div class="bubble-row user">
+            <div class="bubble">这句看不懂 "rainfall is shifting unpredictably"</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">先别急着查词。你<em>看得懂哪几个词</em>？猜一下，猜错没关系。</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">rainfall 是下雨？shifting 不认识</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">对，rainfall 就是降雨 ✅ <br />shifting 里面那个 shift——办公室"换班"也用这个词——现在再猜一下？</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">哦……是在变？变来变去？</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">差不多了。unpredictably 是"无法预测"——现在你能自己读一遍这句吗？</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-label">STEP 3 · 读完验证（反向生成）</div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">现在用中文跟我讲一下<em>这个科学家到底发现了什么</em>？讲得乱没关系。</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">他花了十年测气温，发现雨变得没规律了……</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">等一下——你说他记录了十年的"<em>气温</em>"？可文章里好像说的是<em>降雨量</em>？你再看一眼那段？</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        💡 AI 的默认动作是<b>闭嘴</b>，只在他卡住那一秒出手——而且<b>只给缺的那一块</b>，剩下的让他自己拼上。
+      </div>
+    </section>
+
+
+    <!-- ===== 场景二 · 文言文 ===== -->
+    <section class="scene scene-wenyan">
+      <div class="scene-header">
+        <span class="scene-tag">SCENE 02 · 文言文</span>
+      </div>
+      <h2>古人跟我没关系，所以读不下去</h2>
+
+      <div class="text-sample">
+        <div class="label">📜 今天要读的那篇</div>
+        <div class="content">
+          庆历四年春，滕子京谪守巴陵郡。越明年，政通人和，百废具兴，乃重修岳阳楼⋯⋯<br />
+          ⋯⋯先天下之忧而忧，后天下之乐而乐。
+        </div>
+      </div>
+
+      <div class="chat">
+
+        <div class="step">
+          <div class="step-label">STEP 1 · 进入前（先拆隔阂）</div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">范仲淹写这篇文章的时候，他<em>最好的朋友滕子京</em>——刚被上级穿小鞋，发配到了岳阳。<br /><br />想象一下：你最好的朋友在单位被领导针对，被发配到一个你都没听过的小县城——<em>你会怎么安慰他</em>？</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">我会跟他说，别在意，领导就那样……</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">范仲淹想了很久，最后写了一封很长的信给他——就是这篇《岳阳楼记》。<br />你看<em>他开头这段，在说什么</em>？</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-label">STEP 2 · 读的过程（代入关系）</div>
+          <div class="bubble-row user">
+            <div class="bubble">"先天下之忧而忧"这句是啥意思？</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">先别急着翻译。你觉得范仲淹写这句，<em>是在夸自己，还是在跟滕子京说"咱俩得活成这样的人"</em>？</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">……是跟朋友说的吧？像在鼓励他</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">对了。这句话<em>不是一句"口号"，是两个好朋友之间的一个约定</em>。<br />你再读一遍是不是感觉就不一样了？</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-label">STEP 3 · 读完验证（替古人回信）</div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">如果你是滕子京，收到这封信，<em>你会怎么回</em>？用你自己的话，几句话就行，白话也可以。</div>
+          </div>
+          <div class="bubble-row user">
+            <div class="bubble">"老范，我懂了，先天下之忧而忧，后天下之乐而乐，我们共勉"</div>
+            <div class="avatar">🧑</div>
+          </div>
+          <div class="bubble-row ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">哈哈 ✍️ 再想想——滕子京刚被贬，心情其实挺糟的。你这样"官方式"回复会不会<em>太客套了</em>？试着写得像个真朋友？</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        💡 <b>先拆隔阂，再拆字</b>。古人得先变成一个活人，文章才变成一件具体的事——<br />
+        不是先讲通假字古今异义，是先让学生<b>走进一段关系</b>。
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    TeacherYo · 卡 6 拆解 · <b>带，是陪伴的带</b>
+  </footer>
+
+</div>
+</body>
+</html>

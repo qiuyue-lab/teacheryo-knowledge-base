@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>理解力出题助手 - 专业版</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #f8f4ef 0%, #f4eee8 100%);
+      color: #2f1d14;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+    .section {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .card {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid #eadfd4;
+      box-shadow: 0 12px 32px rgba(73, 45, 21, 0.07);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      color: #2f1d14;
+    }
+    .sub {
+      color: #7a6f68;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #5b4d45;
+    }
+    select, input {
+      width: 100%;
+      border: 1px solid #ddd0c4;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      background: #fffdfb;
+      color: #2f1d14;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    select:focus, input:focus {
+      border-color: #ff9a00;
+      box-shadow: 0 0 0 4px rgba(255, 154, 0, 0.1);
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .chip {
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #fff4ec;
+      border: 1px solid #ffd9c1;
+      color: #b55a16;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: .2s ease;
+    }
+    .chip:hover { transform: translateY(-1px); background: #ffefe2; }
+    .chip.active {
+      background: linear-gradient(90deg, #ff6a00, #ff9a00);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgba(255, 106, 0, 0.18);
+    }
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #ff6a00, #ff9a00);
+      color: white;
+      box-shadow: 0 10px 24px rgba(255, 106, 0, 0.22);
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+
+    /* 结果区样式优化 */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .tab {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #fff3ea;
+      color: #b14d00;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid #ffd4ba;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #ff6a00;
+      color: white;
+      border-color: #ff6a00;
+    }
+    .result-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .result-item {
+      background: #fffaf6;
+      border: 1px solid #efe1d5;
+      border-radius: 18px;
+      padding: 20px;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-item h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #9f4300;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .result-item p, .result-item li {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #403733;
+    }
+    .result-item ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .hint {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff6ef;
+      color: #8a6a54;
+      font-size: 13px;
+      line-height: 1.8;
+      border: 1px dashed #f1c7a7;
+    }
+    @media (max-width: 960px) {
+      .section { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="section">
+      <div class="card">
+        <h2>出题区</h2>
+        <div class="sub">输入知识点，一键生成考查深度理解的高质量题目。</div>
+
+        <div class="field">
+          <label>快捷示例</label>
+          <div class="chip-group" id="exampleChips">
+            <div class="chip active" data-example="primary_math">小学数学</div>
+            <div class="chip" data-example="junior_chinese">初中语文</div>
+            <div class="chip" data-example="high_biology">高中生物</div>
+            <div class="chip" data-example="high_history">高中历史</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>学科选择</label>
+          <select id="subject">
+            <optgroup label="小学">
+              <option>小学语文</option>
+              <option selected>小学数学</option>
+              <option>小学英语</option>
+            </optgroup>
+            <optgroup label="初中">
+              <option>初中语文</option>
+              <option>初中数学</option>
+              <option>初中生物</option>
+              <option>初中物理</option>
+              <option>初中历史</option>
+            </optgroup>
+            <optgroup label="高中">
+              <option>高中语文</option>
+              <option>高中数学</option>
+              <option>高中生物</option>
+              <option>高中历史</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>年级</label>
+            <select id="grade">
+              <option>五年级</option>
+              <option>八年级</option>
+              <option>高一</option>
+              <option>高二</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>难度</label>
+            <select id="difficulty">
+              <option>基础提升</option>
+              <option selected>中等综合</option>
+              <option>高阶思辨</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>知识点输入</label>
+          <input id="knowledge" value="分数的意义" placeholder="请输入具体知识点，如：勾股定理" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>能力目标</label>
+            <select id="ability">
+              <option selected>理解</option>
+              <option>应用</option>
+              <option>分析</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>题目风格</label>
+            <select id="style">
+              <option selected>情境题</option>
+              <option>开放题</option>
+              <option>对比题</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="generateBtn" onclick="handleGenerate()">生成题目</button>
+        <div class="hint">点击“生成题目”模拟AI构思过程。</div>
+      </div>
+
+      <div class="card">
+        <h2>结果区</h2>
+        <div class="sub">包含题目、考查意图、评分标准及错误分析。</div>
+
+        <div class="tabs" id="resultTabs">
+          <div class="tab active" data-target="all">全部</div>
+          <div class="tab" data-target="0">题目</div>
+          <div class="tab" data-target="1">意图</div>
+          <div class="tab" data-target="2">评分</div>
+          <div class="tab" data-target="3">错误</div>
+        </div>
+
+        <div class="result-grid" id="result">
+          <div style="text-align: center; padding: 40px; color: #a1958d;">
+            在左侧输入信息后点击生成按钮
+          </div>
+        </div>
+      </div>
+    </section> section>
+  </div>
+
+  <script>
+    // 预设的高质量案例数据库
+    const examples = {
+      primary_math: {
+        subject: '小学数学', grade: '五年级', knowledge: '分数的意义', ability: '理解', style: '情境题', difficulty: '中等综合',
+        output: {
+          question: `学校春游时，老师把 3 块同样大的蛋糕平均分给 4 个小组。\n1. 小明说：“每个小组分到 3/4 块蛋糕。”你觉得对吗？为什么？\n2. 这里的 3/4 表示什么？它和 1/4 有什么区别？\n3. 如果分给 8 个同学，每人分到多少？请写出过程。`,
+          intent: '考查学生对分数“部分与整体”关系的深度理解，非机械套用公式。',
+          rubric: ['判断正确并结合情境解释 (3分)', '清晰区分份数与单位量 (3分)', '迁移应用到新场景并正确计算 (4分)'],
+          mistakes: ['概念混淆：分不清“几分之几”与“具体数量”', '思维定势：换了分母就不会处理']
+        }
+      },
+      junior_chinese: {
+        subject: '初中语文', grade: '八年级', knowledge: '人物形象分析', ability: '分析', style: '开放题', difficulty: '高阶思辨',
+        output: {
+          question: `有同学评价文中的主人公既“勇敢”又“冲动”。\n请结合文中至少两处细节，谈谈你的看法。如果主人公在另一个冲突情境中，这种性格会带来什么结果？`,
+          intent: '考查辩证思维及基于文本细节的证据整合能力。',
+          rubric: ['观点明确 (2分)', '结合两处以上文本细节 (4分)', '具备合理的情境迁移推导 (4分)'],
+          mistakes: ['标签化评价：只给结论不给证据', '理解片面：无法看到人物性格的多面性']
+        }
+      },
+      high_biology: {
+        subject: '高中生物', grade: '高一', knowledge: '光合作用与呼吸作用关系', ability: '应用', style: '对比题', difficulty: '高阶思辨',
+        output: {
+          question: `有人说：“白天植物只光合，晚上只呼吸。”\n请判断正误并解释。若连续阴雨三天，该植物的干重会如何变化？请说明理由。`,
+          intent: '考查对代谢动态平衡的掌握，而非孤立记忆知识点。',
+          rubric: ['判断准确并解释代谢并存性 (3分)', '逻辑严密说明光强影响 (4分)', '干重变化推导正确 (3分)'],
+          mistakes: ['割裂论：认为两种作用在时间上是互斥的', '忽略动态平衡：只看单一指标']
+        }
+      },
+      high_history: {
+        subject: '高中历史', grade: '高二', knowledge: '工业革命的影响', ability: '综合表达', style: '实践题', difficulty: '中等综合',
+        output: {
+          question: `假如你是博物馆策展人，请设计一个“工业革命与普通人”的微展览。\n1. 选出两件最具代表性的展品。\n2. 撰写一段百字左右的讲解词，说明这两件展品如何改变了当时人的时空观。`,
+          intent: '考查历史解释能力，要求学生将宏大叙事转化为微观理解。',
+          rubric: ['展品选取具有代表性 (3分)', '讲解词逻辑清晰 (3分)', '准确体现“时空观”变化 (4分)'],
+          mistakes: ['照抄课本结论：缺乏策展视角的转化', '缺乏细节：讲解词过于空洞']
+        }
+      }
+    };
+
+    // 模拟AI生成函数：当用户输入库之外的知识点时调用
+    function generateMockContent(data) {
+      return {
+        question: `【${data.style}】关于“${data.knowledge}”的探究：\n假设你在${data.grade}的学习中遇到了一个关于${data.knowledge}的现实难题。请回答：\n1. 阐述${data.knowledge}在这一情境下的核心机制。\n2. 若改变${data.difficulty}所对应的变量，结果会如何？\n3. 结合实际，谈谈这个知识点的应用局限性。`,
+        intent: `深度考查学生在${data.ability}维度对${data.knowledge}的掌握情况，强调知识的迁移与变式运用。`,
+        rubric: [
+          `逻辑自洽，准确还原核心原理 (4分)`,
+          `能完成复杂变量下的${data.ability}推导 (3分)`,
+          `表达严谨，符合${data.subject}学科规范 (3分)`
+        ],
+        mistakes: [
+          `死记硬背：无法脱离课本原话解释现象`,
+          `推导断层：逻辑链条不完整`
+        ]
+      };
+    }
+
+    // 处理生成逻辑
+    async function handleGenerate() {
+      const btn = document.getElementById('generateBtn');
+      const resultDiv = document.getElementById('result');
+      
+      const formData = {
+        subject: document.getElementById('subject').value,
+        grade: document.getElementById('grade').value,
+        knowledge: document.getElementById('knowledge').value,
+        ability: document.getElementById('ability').value,
+        style: document.getElementById('style').value,
+        difficulty: document.getElementById('difficulty').value
+      };
+
+      // 按钮状态切换
+      btn.disabled = true;
+      btn.innerText = "正在构思题目...";
+      resultDiv.innerHTML = `<div style="text-align:center; padding: 40px; color:#ff6a00;">🔍 正在基于 ${formData.subject} 知识库构建情境...</div>`;
+
+      // 模拟 800ms 的“思考”时间
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // 匹配案例或生成新内容
+      let matched = Object.values(examples).find(ex => ex.knowledge === formData.knowledge);
+      const finalOutput = matched ? matched.output : generateMockContent(formData);
+
+      renderResult(finalOutput);
+
+      btn.disabled = false;
+      btn.innerText = "生成题目";
+    }
+
+    // 渲染结果到页面
+    function renderResult(output) {
+      const resultDiv = document.getElementById('result');
+      const data = [
+        { title: '一、题目内容', content: output.question.replace(/\n/g, '<br>'), icon: '📝' },
+        { title: '二、考查意图', content: output.intent, icon: '🎯' },
+        { title: '三、评分标准', content: `<ul>${output.rubric.map(r => `<li>${r}</li>`).join('')}</ul>`, icon: '📏' },
+        { title: '四、常见错误', content: `<ul>${output.mistakes.map(m => `<li>${m}</li>`).join('')}</ul>`, icon: '⚠️' }
+      ];
+
+      resultDiv.innerHTML = data.map((item, idx) => `
+        <div class="result-item" data-index="${idx}">
+          <h3>${item.icon} ${item.title}</h3>
+          <div>${item.content}</div>
+        </div>
+      `).join('');
+    }
+
+    // Tab 切换逻辑
+    document.getElementById('resultTabs').addEventListener('click', (e) => {
+      if (!e.target.classList.contains('tab')) return;
+      
+      // 更新 Tab 样式
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+
+      // 过滤显示内容
+      const target = e.target.dataset.target;
+      document.querySelectorAll('.result-item').forEach(item => {
+        if (target === 'all' || item.dataset.index === target) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // 快捷芯片点击逻辑
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        
+        const data = examples[chip.dataset.example];
+        document.getElementById('subject').value = data.subject;
+        document.getElementById('grade').value = data.grade;
+        document.getElementById('knowledge').value = data.knowledge;
+        document.getElementById('ability').value = data.ability;
+        document.getElementById('style').value = data.style;
+        document.getElementById('difficulty').value = data.difficulty;
+        
+        handleGenerate(); // 点击后自动触发生成
+      });
+    });
+
+    // 页面加载默认点击第一个
+    window.onload = () => { handleGenerate(); };
+  </script>
+</body>
+</html>

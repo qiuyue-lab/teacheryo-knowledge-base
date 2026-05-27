@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeacherYO社群首届教师黑客松大赛 - 情境卡抽取</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pri:#FF5E00; --pri-dark:#D94F00;
+  --gold:#FFB800; --gold-dark:#D99C00;
+  --pink:#FF3366; --grn:#00C853;
+  --ink:#2D1810; --mu:#8D7970;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Noto Sans SC',sans-serif;
+  color:var(--ink);
+  background-color: #FFE0B2;
+  background-image: radial-gradient(circle at 50% 0%, #FFF3E0 0%, #FFCC80 60%, #FFB74D 100%);
+  position:relative;
+}
+/* 动态背景装饰 */
+.bg-shape{position:absolute;border-radius:50%;filter:blur(60px);z-index:0;opacity:0.5;pointer-events:none}
+.bg-shape.s1{width:400px;height:400px;background:#FF3366;top:-100px;left:-100px;animation:float1 10s infinite alternate}
+.bg-shape.s2{width:500px;height:500px;background:#FFB800;bottom:-150px;right:-100px;animation:float2 12s infinite alternate}
+@keyframes float1{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+@keyframes float2{0%{transform:translate(0,0)}100%{transform:translate(-50px,-50px)}}
+
+.page{width:98vw;max-width:1600px;height:100vh;margin:0 auto;display:flex;flex-direction:column;padding:15px 20px;position:relative;z-index:1}
+header{text-align:center;margin-bottom:15px;flex-shrink:0}
+header h1{font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(26px,3vw,40px);color:var(--ink);text-shadow:2px 2px 0 #fff, 4px 4px 0 rgba(255,94,0,0.15);letter-spacing:1px}
+header h1 span{color:var(--pri)}
+
+/* 左右5:5均衡布局 */
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:30px;min-height:0}
+
+/* ===== 左侧：玻璃态表格面板 ===== */
+.left{
+  background:rgba(255,255,255,0.65);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:2px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  box-shadow:0 10px 40px rgba(255,94,0,0.1);
+  display:flex;flex-direction:column;min-height:0;padding:20px;
+}
+.tbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:2px dashed rgba(255,94,0,0.2);margin-bottom:10px;flex-shrink:0}
+.tbar h2{font-size:18px;font-weight:900;color:var(--pri);font-family:'ZCOOL KuaiLe',cursive;letter-spacing:1px}
+.tbar-r{display:flex;gap:10px;align-items:center}
+.pill{font-size:12px;font-weight:700;color:var(--mu);padding:4px 12px;border-radius:12px;background:rgba(255,255,255,0.8);box-shadow:inset 0 1px 3px rgba(0,0,0,0.05)}
+.pill b{color:var(--pri);font-family:'ZCOOL KuaiLe',cursive;font-size:16px;margin-left:4px}
+.pill.dg b{color:var(--pink)}
+.cbtn{border:none;background:rgba(255,255,255,0.8);color:var(--pri);font-weight:800;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);transition:all .2s}
+.cbtn:hover{background:var(--pri);color:#fff}
+.rbtn{border:none;background:rgba(255,255,255,0.8);color:var(--mu);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,0.05);transition:all .2s}
+.rbtn:hover{color:var(--ink)}
+
+.tw{flex:1;overflow-y:auto;min-height:0;padding-right:5px}
+.tw::-webkit-scrollbar{width:6px}
+.tw::-webkit-scrollbar-thumb{background:rgba(255,94,0,.2);border-radius:6px}
+
+/* 游戏化表格设计 */
+table{width:100%;border-collapse:separate;border-spacing:0 8px;table-layout:fixed}
+colgroup .c1{width:90px}
+colgroup .c2{width:160px}
+colgroup .c4{width:70px}
+th{position:sticky;top:0;z-index:2;background:rgba(255,243,224,0.95);backdrop-filter:blur(10px);font-size:13px;font-weight:900;color:#A0522D;text-align:left;padding:8px 12px;border-radius:8px}
+td{padding:10px 12px;font-size:14px;background:rgba(255,255,255,0.8);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:all .2s;border-top:1px solid #fff;border-bottom:1px solid #fff}
+td:first-child{border-radius:12px 0 0 12px;border-left:1px solid #fff}
+td:last-child{border-radius:0 12px 12px 0;border-right:1px solid #fff}
+tr.dr:hover td{background:#fff;transform:scale(1.01);box-shadow:0 4px 15px rgba(255,94,0,0.1);z-index:1;position:relative}
+tr.dr.done td{background:rgba(240,255,244,0.8)}
+.cid-col{font-weight:900;color:var(--pri);font-family:'ZCOOL KuaiLe',cursive;font-size:15px}
+.m-col{font-weight:700;color:#444}
+.res-col{font-weight:800;font-size:13px;color:var(--grn);user-select:text;cursor:text}
+.jn-col{text-align:center}
+
+/* 游戏化立体按钮 */
+.bd{appearance:none;border:none;background:linear-gradient(180deg,#FF8C00 0%,#FF5E00 100%);color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:14px;padding:6px 16px;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 var(--pri-dark), 0 6px 10px rgba(255,94,0,0.3);transition:all .1s;white-space:nowrap;letter-spacing:1px}
+.bd:hover:not(:disabled){filter:brightness(1.1)}
+.bd:active:not(:disabled){transform:translateY(4px);box-shadow:0 0 0 var(--pri-dark), 0 2px 4px rgba(255,94,0,0.3)}
+.bd:disabled{background:#d5d5d5;box-shadow:0 4px 0 #b5b5b5;color:#999;cursor:not-allowed}
+
+.jnb{appearance:none;border:none;background:linear-gradient(180deg,#FFD54F 0%,#FFB800 100%);color:#8A5A00;font-family:'ZCOOL KuaiLe',cursive;font-size:13px;padding:6px 12px;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 var(--gold-dark);transition:all .1s;white-space:nowrap}
+.jnb:active{transform:translateY(4px);box-shadow:0 0 0 var(--gold-dark)}
+
+/* ===== 右侧：舞台区 ===== */
+.right{
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:2px solid rgba(255,255,255,0.9);
+  border-radius:24px;
+  box-shadow:inset 0 0 40px rgba(255,255,255,0.5), 0 10px 40px rgba(255,94,0,0.1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;perspective:2000px;
+}
+.mlbl{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:14px;font-weight:900;color:var(--pri);background:#fff;padding:6px 20px;border-radius:20px;z-index:30;letter-spacing:2px;box-shadow:0 4px 12px rgba(255,94,0,0.15);border:2px solid #FFE0CC}
+.mlbl.jm{color:#b8860b;border-color:#FFE082}
+
+/* 卡片容器 */
+.hero{width:min(420px,90%);height:min(600px,85vh);position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.34,1.56,.64,1);z-index:10}
+.hero.dw{animation:bou .4s infinite alternate}
+@keyframes bou{0%{transform:translateY(0) rotate(0) scale(1)}100%{transform:translateY(-15px) rotate(3deg) scale(1.05)}}
+.hero.flip{transform:rotateY(180deg)}
+.cf{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;box-shadow:0 20px 50px rgba(0,0,0,.15);overflow:hidden}
+
+/* 卡背 */
+.cb{background:linear-gradient(135deg,var(--pri),var(--gold));display:flex;align-items:center;justify-content:center;position:relative;border:6px solid #fff}
+.cb::before{content:'';position:absolute;inset:12px;border:3px dashed rgba(255,255,255,.4);border-radius:16px}
+.cb .lg{font-family:'ZCOOL KuaiLe',cursive;font-size:100px;color:#fff;text-shadow:3px 3px 0 rgba(0,0,0,.1);animation:pu 2s infinite}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.rl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px;font-weight:900;color:#fff;opacity:0;z-index:20;pointer-events:none;font-family:'ZCOOL KuaiLe',cursive;text-shadow:3px 3px 0 rgba(0,0,0,.1)}
+.dw .rl{opacity:1}
+.dw .lg{opacity:0}
+
+/* ===== 情境卡正面 ===== */
+.cft{transform:rotateY(180deg);background:#fff;padding:24px;display:flex;flex-direction:column;border:6px solid #fff}
+.cft::before{content:'';position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(90deg,var(--pri),var(--gold))}
+.cft.sec::before{background:linear-gradient(90deg,var(--pink),#ff8800)}
+
+.cft .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:2px dashed #eee}
+.cft .sid{font-size:18px;font-weight:900;color:var(--mu);font-family:'ZCOOL KuaiLe',cursive}
+.cft .bg{font-size:12px;padding:4px 12px;border-radius:14px;background:rgba(255,184,0,.2);color:#d97700;font-weight:900}
+.cft.sec .bg{background:rgba(255,51,102,.12);color:var(--pink)}
+
+/* 居中内容区，解决留白问题 */
+.card-body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.cft .tm{background:rgba(255,94,0,.08);color:var(--pri);padding:6px 16px;border-radius:20px;font-weight:900;font-size:14px;margin-bottom:16px;border:1px solid rgba(255,94,0,.15)}
+.cft .tt{font-size:26px;font-weight:900;line-height:1.3;margin-bottom:20px;color:var(--ink)}
+.cft .sc{font-size:16px;line-height:1.6;color:#444;text-align:justify;margin-bottom:30px;width:100%}
+
+/* 醒目的任务目标框 */
+.cft .task-box{background:linear-gradient(135deg,var(--pri),#FF8C00);padding:20px;border-radius:16px;width:100%;text-align:left;box-shadow:0 8px 20px rgba(255,94,0,0.2);position:relative;overflow:hidden}
+.cft.sec .task-box{background:linear-gradient(135deg,var(--pink),#FF6B6B);box-shadow:0 8px 20px rgba(255,51,102,0.2)}
+.cft .task-box::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.1);border-radius:50%}
+.cft .tl{color:rgba(255,255,255,0.9);font-size:13px;font-weight:900;margin-bottom:8px;letter-spacing:1px}
+.cft .tk{font-size:16px;line-height:1.5;font-weight:700;color:#fff}
+
+/* ===== 锦囊正面 ===== */
+.cjn{transform:rotateY(180deg);background:#FFFDF5;padding:24px;display:flex;flex-direction:column;border:6px solid var(--gold)}
+.cjn::before{content:'';position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(90deg,var(--gold),#ffe082)}
+.cjn .jh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:2px dashed rgba(184,134,11,.2)}
+.cjn .jt{font-size:14px;font-weight:900;color:#b8860b;background:rgba(255,184,0,.15);padding:4px 12px;border-radius:14px}
+.cjn .jc{font-size:14px;color:var(--mu);font-family:'ZCOOL KuaiLe',cursive}
+
+.cjn .card-body{justify-content:flex-start;text-align:left;overflow-y:auto;padding-right:5px}
+.cjn .card-body::-webkit-scrollbar{width:4px}
+.cjn .card-body::-webkit-scrollbar-thumb{background:rgba(184,134,11,.2);border-radius:4px}
+.cjn .jtm{text-align:center;font-weight:900;font-size:14px;color:#b8860b;margin-bottom:10px;width:100%}
+.cjn .jtt{font-size:22px;font-weight:900;margin-bottom:20px;color:#5d4200;text-align:center;width:100%}
+.cjn .jbd{font-size:15px;line-height:1.65;color:#5d4200;width:100%}
+.cjn .jbd p{margin-bottom:15px;background:rgba(255,184,0,0.05);padding:15px;border-radius:12px;border-left:4px solid var(--gold)}
+.cjn .jbd .lanes{margin-top:15px;padding:15px;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.03);border:1px solid rgba(184,134,11,.1)}
+.cjn .jbd .lanes b{display:block;margin-bottom:10px;color:#b8860b;font-size:16px}
+.cjn .jbd .lanes .ln{font-size:14px;margin-bottom:8px;padding-left:16px;position:relative}
+.cjn .jbd .lanes .ln::before{content:'•';position:absolute;left:4px;color:var(--gold)}
+
+.hide{display:none !important}
+.confetti{position:absolute;width:10px;height:10px;z-index:100;animation:fa 2.5s linear forwards}
+@keyframes fa{0%{transform:translateY(-60px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="bg-shape s1"></div>
+<div class="bg-shape s2"></div>
+<div class="page">
+  <header>
+    <h1><span>TeacherYO社群首届教师黑客松大赛</span> · 情境卡抽取系统</h1>
+  </header>
+  <div class="main">
+    <!-- 左侧：游戏化表格面板 -->
+    <div class="left">
+      <div class="tbar">
+        <h2>🏆 参赛小组 (17组)</h2>
+        <div class="tbar-r">
+          <div class="pill">剩余<b id="rC">17</b></div>
+          <div class="pill dg">绝版<b id="xC">0</b></div>
+          <button class="cbtn" id="cpB">📋 复制结果</button>
+          <button class="rbtn" id="rsB">🔄 重置</button>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <colgroup><col class="c1"><col class="c2"><col><col class="c4"></colgroup>
+          <thead><tr><th>赛道</th><th>成员</th><th>抽签结果</th><th>锦囊</th></tr></thead>
+          <tbody id="tb"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- 右侧：玻璃态舞台区 -->
+    <div class="right" id="stg">
+      <div class="mlbl" id="ml">🎯 情境卡抽取</div>
+      <div class="hero" id="hero">
+        <!-- 卡背 -->
+        <div class="cf cb" id="cBack">
+          <div class="lg">?</div>
+          <div class="rl" id="rl"></div>
+        </div>
+        <!-- 情境卡正面 -->
+        <div class="cf cft" id="cSit">
+          <div class="hd">
+            <span class="sid" id="sId">No.00</span>
+            <span class="bg" id="sBg">首次抽中</span>
+          </div>
+          <div class="card-body">
+            <div class="tm" id="sTm">等待抽取</div>
+            <h2 class="tt" id="sTt">等待抽取</h2>
+            <div class="sc" id="sSc">请在左侧点击小组的【抽签】按钮</div>
+            <div class="task-box">
+              <div class="tl">🎯 任务目标</div>
+              <div class="tk" id="sTk">等待指令</div>
+            </div>
+          </div>
+        </div>
+        <!-- 锦囊正面 -->
+        <div class="cf cjn hide" id="cJn">
+          <div class="jh">
+            <span class="jt">🎁 锦囊</span>
+            <span class="jc" id="jCd">No.00</span>
+          </div>
+          <div class="card-body">
+            <div class="jtm" id="jTm">小组名</div>
+            <h2 class="jtt" id="jTt">锦囊标题</h2>
+            <div class="jbd" id="jBd">锦囊内容</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var C=[
+{id:1,t:'一个知识点，三种学生',
+s:'你正在教一个知识点。班里有三种状态的学生同时存在——一种已经会了、开始走神；一种跟得上、但不主动；一种卡住了、越听越迷糊。假设每个学生手上都有一台设备。',
+k:'选你自己学科里的一个知识点，做一个东西，让三种学生在同一个课堂里各自有事干、各自在成长。'},
+{id:2,t:'AI时代的作业设计',
+s:'你布置了一个作业。第二天收上来，你发现一大半答案\u201c看起来还不错\u201d，但你直觉告诉你：很多人压根没动脑，AI帮他们写的。\u201c防AI\u201d已经没意义了。传统作业正在失效。',
+k:'选你学科里最常布置的一种作业类型，重新设计它——设计一种允许甚至鼓励用AI，但学生必须动脑的作业或学习任务，并做出配套工具。'},
+{id:3,t:'出一道好题',
+s:'期中考试，你要出一道综合题。要求：考的是真正的理解力，不是记忆力；学生没法靠刷题套路得分；改卷时能一眼看出学生到底懂没懂。',
+k:'做一个东西，帮任何学科的老师从一个知识点出发，生成一道考理解、考思维、不能靠背诵的好题，附带评分标准和常见错误分析。'},
+{id:4,t:'一切皆可学',
+s:'你走在路上看到一栋老建筑想知道它的历史。你刷到一条新闻里面有个概念似懂非懂。这些瞬间都是学习的入口，但大多数时候好奇心来了又走了，什么也没留下。',
+k:'做一个东西，能把任何一个好奇的瞬间变成一段真正的学习——从好奇到真正搞懂，而不是给一个百科式的标准答案。'},
+{id:5,t:'名师是怎么炼成的',
+s:'你一定见过那种老师——同样的知识点、同样的学生，Ta教完之后学生就是比别人班理解得更深。你知道Ta厉害，但说不清Ta到底厉害在哪。是学科功底更深？是提问方式更好？是更会读懂学生的状态？还是对“什么时候该讲、什么时候该等”有一种直觉？这些“厉害”如果说不清楚，就没法学、没法传、也没法让AI帮上忙。',
+k:'先想清楚——在你的学科里，一个名师到底比普通老师多了什么？从哪些维度可以拆解？然后，做一个东西，能沿着你想清楚的这些维度，帮助捕捉、呈现或培养一个老师的教学能力。'},
+{id:6,t:'带一个人读懂一篇\u201c读不下去\u201d的东西',
+s:'有一篇东西，学习者知道它很重要，但就是读不下去——可能是文言文、英语长文、学术论文、复杂的证明推导。读不下去的原因各不相同。',
+k:'做一个东西，能把任何一篇\u201c读不下去\u201d的材料变成一个引导式的阅读体验——带着Ta一步步读进去、读懂。'},
+{id:7,t:'从一道错题出发，找到学生真正卡在哪',
+s:'一个学生做错了一道题。\u201c错了\u201d这个信息几乎没用。真正有用的是：Ta到底在哪一步走偏了？是概念没搞懂，还是搞懂了但忘了？',
+k:'做一个东西，从一道错题出发，帮老师或学生精准定位思维到底断在哪一步、断的是什么类型，并给出修复方向。'},
+{id:8,t:'让\u201c必须学但没人想学\u201d的知识变有趣',
+s:'有一个知识点，所有人都知道很重要，但学习者就是提不起兴趣——每个学科都有这种\u201c明知重要但就是无聊\u201d的内容。',
+k:'选一个你学科里公认无聊但必须学的知识点，做一个东西，让学习者看到就想试试。目标：从\u201c不得不学\u201d变成\u201c想试试\u201d。'},
+{id:9,t:'为你的学生设计一个AI学习搭档',
+s:'你班上有学生课后想复习和练习，但你不可能24小时在线辅导。你希望有一个AI能\u201c代替你\u201d，按照你的教学理念和引导方式来陪学生。',
+k:'为你的学生设计一个课后AI学习搭档——它按照你的教学逻辑来工作，学生打开就能用。'},
+{id:10,t:'给学生建一份\u201c活的\u201d学习画像',
+s:'你带了一个班三年，对每个学生的了解比家长还深。但这些了解全存在你脑子里。下一个接班的老师从零开始。你三年的理解，就这么消失了。',
+k:'做一个东西，能帮老师给学生建起一份\u201c活的\u201d学习画像——不只是成绩，而是学习风格、认知卡点、情绪状态、成长轨迹。'}
+];
+
+var JN=[
+{h:'试试这个思路——同一个任务，能不能设计成\u201c多层入口\u201d？比如同一个问题，基础版是填空，进阶版是解释为什么，挑战版是出一道同类题考别人。关键词：一个任务、多个层次、自主选择难度。',
+l:['HTML \u2192 自适应分层学习工具，不同水平学生自动匹配不同难度任务','AI角色 \u2192 根据学习者回答动态调整难度和引导方式的导学助手','工作流 \u2192 输入知识点\u2192自动输出三层任务单（挑战/巩固/补基础）','Skill \u2192 \u201c同一知识点\u00b7三种难度\u00b7三种引导\u201d的教学设计模板']},
+{h:'换个角度想——如果作业的重点不是\u201c最终的答案\u201d，而是\u201c思考的过程\u201d呢？比如：要求学生展示他和AI的对话记录，并标注\u201cAI哪里说错了\u201d或\u201c我在哪一步追问了AI\u201d。关键词：过程可见、追问、AI是工具不是枪手。',
+l:['HTML \u2192 \u201cAI辅助但思考可见\u201d的作业提交/展示工具','AI角色 \u2192 不给答案、只追问\u201c你是怎么想的\u201d的苏格拉底式导学助手','工作流 \u2192 学生提交作业\u2192检测思考深度\u2192生成个性化追问','Skill \u2192 \u201c允许AI但必须动脑\u201d的作业设计模板']},
+{h:'好题的设计可以从\u201c反面\u201d开始——先想清楚\u201c我想暴露学生哪个常见误解\u201d，然后围绕这个误解来设计题目。关键词：从误解出发、考迁移而不是记忆、评分标准和题目一起设计。',
+l:['HTML \u2192 输入知识点和考察目标\u2192生成\u201c考理解\u201d的题目+评分标准','AI角色 \u2192 一个\u201c命题顾问\u201d，追问你\u201c你想区分的到底是什么能力\u201d','工作流 \u2192 知识点\u2192生成题目\u2192自动附带评分标准和常见错误分析','Skill \u2192 \u201c从考察能力出发的命题\u201d提示词模板']},
+{h:'好奇心的保质期大概只有30秒。想想在这30秒内怎么把人\u201c勾住\u201d——不是给一大段解释，而是先给一个让人更好奇的反问或意想不到的事实。然后用\u201c你想先了解哪个方向？\u201d让学习者自己选。关键词：先勾住、再引导、让学习者自己选方向。',
+l:['HTML \u2192 一个\u201c输入任何好奇\u201d的学习工具','AI角色 \u2192 一个\u201c万能学习搭子\u201d，你好奇什么就跟它聊','工作流 \u2192 输入好奇内容\u2192判断领域和深度\u2192生成探索路径','Skill \u2192 \u201c把任何好奇心变成一段学习\u201d的引导式模板']},
+{h:'每个人都能感受到名师和普通老师的区别，但几乎没有人能清楚地说出来“区别到底在哪几个维度上”。这是最难也是最有价值的思考——只有想清楚了维度，才能做出真正有用的东西。AI不缺执行力，缺的是“沿着什么框架去执行”。',
+l:['HTML \u2192 “教学能力拆解”自评工具，老师在每个维度自评并写案例，生成可视化画像','AI角色 \u2192 “教学能力教练”，通过对话（如“最近一次让学生开窍做了什么”）帮老师拆解能力','工作流 \u2192 输入教学记录/自述\u2192按维度自动分析\u2192输出教学能力画像+薄弱维度成长建议','Skill \u2192 “拆解教师教学能力”分析模板，包含维度框架、判断标准及如何提取证据']},
+{h:'不要一上来就让人从头读到尾。试试\u201c分段+追问\u201d的方式：把材料切成小块，每读完一小块就问一个问题。读不懂的地方，不是跳过，而是\u201c刚好在那个位置\u201d补上背景知识。关键词：拆小块、读一段问一段、缺什么补什么。',
+l:['HTML \u2192 上传/粘贴材料\u2192生成分层引导式阅读页面','AI角色 \u2192 一个\u201c阅读搭档\u201d，陪你一段一段读','工作流 \u2192 输入材料\u2192自动分析难点\u2192生成\u201c逐段引导阅读方案\u201d','Skill \u2192 \u201c把难文章变成引导式阅读体验\u201d的模板']},
+{h:'不要问\u201c正确答案是什么\u201d——问\u201c你当时是怎么想的\u201d。让学生说出解题思路，对比正确思路，看在哪一步分叉了。分叉之后再判断：概念没理解？理解了但忘了？单独会但综合就乱？还是换个说法就不认识了？关键词：还原思路、找到分叉点、区分断点类型。',
+l:['HTML \u2192 输入错题和解题过程\u2192可视化标注\u201c思维断在哪一步\u201d','AI角色 \u2192 一个\u201c错题诊断师\u201d，追问你\u201c你当时是怎么想的\u201d','工作流 \u2192 错题+解题过程\u2192分析断点类型\u2192输出修复方案','Skill \u2192 \u201c从一道错题诊断思维断点\u201d的模板']},
+{h:'不要只想着\u201c加游戏元素\u201d。先问自己：\u201c这个知识在真实生活中，什么时候会突然变得有用/有趣？\u201d找到连接点，用那个场景来包装学习。比如化学方程式配平——如果你是火箭燃料工程师，配错了会怎样？关键词：找到真实连接点、让知识变得\u201c跟我有关\u201d。',
+l:['HTML \u2192 选一个枯燥知识点\u2192做成有互动/挑战的学习页面','AI角色 \u2192 一个\u201c学习体验设计师\u201d，帮你把知识点包装成有趣情境','工作流 \u2192 输入知识点+学习者画像\u2192输出情境化学习方案','Skill \u2192 \u201c把枯燥知识变成让人想试的体验\u201d模板']},
+{h:'想象你正坐在学生旁边看Ta做题。Ta写到第三步停下来了——你会说什么？你会直接告诉答案，还是问\u201c你觉得下一步应该干什么\u201d？把你脑子里这套\u201c什么时候介入、怎么介入\u201d的判断逻辑写下来，这就是你的AI学习搭档的核心。关键词：不是给答案、而是设计\u201c什么时候说什么\u201d的引导逻辑。',
+l:['HTML \u2192 一个学生端的练习/学习工具，内嵌你的教学引导逻辑','AI角色 \u2192 一个按你的风格工作的\u201cAI助教\u201d角色','工作流 \u2192 学生提出问题\u2192按你设定的引导流程逐步引导','Skill \u2192 \u201c按我的教学逻辑引导学生\u201d的定制化模板']},
+{h:'想象下学期有一个新老师接你的班。Ta第一天走进教室，对学生一无所知。如果你只能给Ta一页纸介绍某个学生——你会写什么？不是成绩，是\u201c这个人怎么学、什么方式对Ta有效、什么情况下Ta会关机\u201d。关键词：不是成绩单、是\u201c怎么跟这个人打交道\u201d的说明书。',
+l:['HTML \u2192 一个学生画像工具，老师输入日常观察，自动整合成结构化档案','AI角色 \u2192 一个\u201c学生观察搭档\u201d，帮你整理、追问、补全画像','工作流 \u2192 老师观察+学生反馈\u2192自动生成/更新画像\u2192标注两个视角差距','Skill \u2192 \u201c从日常观察中构建学生学习画像\u201d的模板']}
+];
+
+var T=[
+{id:'HTML1',a:'三水',b:'Alice'},
+{id:'HTML2',a:'躬行者',b:'清风'},
+{id:'HTML3',a:'昭理绘山河',b:'彭不住了'},
+{id:'HTML4',a:'Cecilia陈老师靠谱很靠谱',b:'蒙七君'},
+{id:'HTML5',a:'Lasso',b:'张思嘉'},
+{id:'HTML6',a:'JN',b:'树懒'},
+{id:'HTML7',a:'雷君',b:'Iris'},
+{id:'HTML8',a:'carddie',b:'所罗门'},
+{id:'HTML9',a:'西溪',b:'越虹'},
+{id:'HTML10',a:'苏格',b:'OuO'},
+{id:'AI角色1',a:'希希',b:'jian'},
+{id:'AI角色2',a:'囧',b:'黄火火'},
+{id:'AI角色3',a:'Bella',b:'Shanker'},
+{id:'AI角色4',a:'TFC南诗懿',b:'亮亮'},
+{id:'AI角色5',a:'babysbreath',b:'Spon7'},
+{id:'AI角色6',a:'李苏苏苏',b:'大睿睿'},
+{id:'教学SKILL1',a:'立葵',b:'长夜行'}
+];
+
+var cards,queue,res,busy;
+var tb=document.getElementById('tb');
+var hero=document.getElementById('hero');
+var cSit=document.getElementById('cSit');
+var cJn=document.getElementById('cJn');
+var rl=document.getElementById('rl');
+var ml=document.getElementById('ml');
+
+function p2(n){return n<10?'0'+n:''+n;}
+function mkQ(){
+  var all=[1,2,3,4,5,6,7,8,9,10];
+  var shuf=all.slice().sort(function(){return Math.random()-.5;});
+  var dup=shuf.slice(0,7);
+  var deck=all.concat(dup);
+  return deck.sort(function(){return Math.random()-.5;});
+}
+
+function init(){
+  cards=C.map(function(c){return{id:c.id,t:c.t,s:c.s,k:c.k,hits:0,gone:false};});
+  res={};queue=mkQ();busy=false;
+  hero.classList.remove('flip','dw');
+  cSit.classList.remove('hide','sec');
+  cJn.classList.add('hide');
+  ml.textContent='🎯 情境卡抽取';ml.className='mlbl';
+  render();stats();
+}
+
+function render(){
+  var h='';
+  for(var i=0;i<T.length;i++){
+    var tm=T[i],r=res[tm.id];
+    h+='<tr class="dr'+(r?' done':'')+'">';
+    h+='<td class="cid-col">'+(r?'\u2705 ':'')+tm.id+'</td>';
+    h+='<td class="m-col">'+tm.a+' & '+tm.b+'</td>';
+    if(r){
+      h+='<td class="res-col" title="No.'+p2(r.id)+' '+r.t+'">No.'+p2(r.id)+' '+r.t+'</td>';
+      h+='<td class="jn-col"><button class="jnb" onclick="showJN(\''+tm.id+'\')">🎁 锦囊</button></td>';
+    }else{
+      h+='<td><button class="bd" onclick="go(\''+tm.id+'\')"'+(busy?' disabled':'')+'>抽签</button></td>';
+      h+='<td class="jn-col"></td>';
+    }
+    h+='</tr>';
+  }
+  tb.innerHTML=h;
+}
+
+function stats(){
+  var rm=cards.filter(function(c){return c.gone;}).length;
+  document.getElementById('rC').textContent=queue.length;
+  document.getElementById('xC').textContent=rm;
+}
+
+function confetti(){
+  var st=document.getElementById('stg');
+  var co=['#ff5e00','#ffb800','#ff3366','#00c3ff','#8ce5ff','#00c853'];
+  for(var i=0;i<40;i++){
+    var el=document.createElement('div');
+    el.className='confetti';
+    el.style.left=Math.random()*100+'%';el.style.top='-20px';
+    el.style.backgroundColor=co[Math.floor(Math.random()*co.length)];
+    el.style.animationDuration=(Math.random()*1.5+1)+'s';
+    el.style.animationDelay=(Math.random()*.4)+'s';
+    if(Math.random()>.5)el.style.borderRadius='50%';
+    st.appendChild(el);
+    (function(e){setTimeout(function(){e.remove();},3500);})(el);
+  }
+}
+
+function go(tid){
+  if(busy||queue.length===0)return;
+  busy=true;render();
+  cSit.classList.remove('hide');cJn.classList.add('hide');
+  ml.textContent='🎯 情境卡抽取';ml.className='mlbl';
+  if(hero.classList.contains('flip'))hero.classList.remove('flip');
+  setTimeout(function(){
+    hero.classList.add('dw');
+    var tk=0,mx=20,ac=cards.filter(function(c){return!c.gone;});
+    var iv=setInterval(function(){
+      var rc=ac[Math.floor(Math.random()*ac.length)];
+      rl.textContent=rc.id;tk++;
+      if(tk>=mx){clearInterval(iv);fin(queue.pop(),tid);}
+    },80);
+  },300);
+}
+
+function fin(cid,tid){
+  var sel=cards.filter(function(c){return c.id===cid;})[0];
+  var tm=T.filter(function(t){return t.id===tid;})[0];
+  sel.hits++;var sec=sel.hits>=2;
+  res[tid]={id:sel.id,t:sel.t};
+  document.getElementById('sTm').innerHTML='\ud83c\udf89 <strong>'+tm.id+' ('+tm.a+' & '+tm.b+')</strong> 抽中！';
+  document.getElementById('sId').textContent='No.'+p2(sel.id);
+  document.getElementById('sTt').textContent=sel.t;
+  document.getElementById('sSc').textContent=sel.s;
+  document.getElementById('sTk').textContent=sel.k;
+  var bg=document.getElementById('sBg');
+  if(sec){bg.textContent='二次抽中 · 绝版';cSit.classList.add('sec');sel.gone=true;}
+  else{bg.textContent='首次抽中 · 激活';cSit.classList.remove('sec');confetti();}
+  hero.classList.remove('dw');hero.classList.add('flip');
+  setTimeout(function(){busy=false;render();stats();},1000);
+}
+
+function showJN(tid){
+  var r=res[tid];if(!r)return;
+  var tm=T.filter(function(t){return t.id===tid;})[0];
+  var jn=JN[r.id-1];if(!jn)return;
+  cSit.classList.add('hide');cJn.classList.remove('hide');
+  ml.textContent='🎁 锦囊揭晓';ml.className='mlbl jm';
+  document.getElementById('jCd').textContent='No.'+p2(r.id);
+  document.getElementById('jTm').textContent=tm.id+' ('+tm.a+' & '+tm.b+')';
+  document.getElementById('jTt').textContent='锦囊：'+r.t;
+  var bd='<p>'+jn.h+'</p>';
+  bd+='<div class="lanes"><b>💡 四个赛道参考：</b>';
+  for(var i=0;i<jn.l.length;i++){bd+='<div class="ln">'+jn.l[i]+'</div>';}
+  bd+='</div>';
+  document.getElementById('jBd').innerHTML=bd;
+  if(hero.classList.contains('flip'))hero.classList.remove('flip');
+  setTimeout(function(){hero.classList.add('flip');},100);
+}
+
+document.getElementById('cpB').addEventListener('click',function(){
+  var ls=[];
+  for(var i=0;i<T.length;i++){
+    var t=T[i],r=res[t.id];
+    ls.push(t.id+'\t'+t.a+'\t'+t.b+'\t'+(r?'No.'+p2(r.id)+' '+r.t:'未抽签'));
+  }
+  navigator.clipboard.writeText(ls.join('\n')).then(function(){alert('已复制！可直接粘贴到文档中');}).catch(function(){prompt('请手动复制：',ls.join('\n'));});
+});
+
+document.getElementById('rsB').addEventListener('click',function(){
+  if(confirm('确定要重置吗？所有记录将被清空。'))init();
+});
+
+init();
+</script>
+</body>
+</html>

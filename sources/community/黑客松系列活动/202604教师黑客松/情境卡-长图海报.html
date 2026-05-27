@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeacherYO社群首届教师黑客松大赛 - 题目卡片</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pri: #FF5E00;
+  --pri-light: #FFF0E5;
+  --gold: #FFB800;
+  --pink: #FF3366;
+  --ink: #2D1810;
+  --mu: #8D7970;
+  --bg: #FFF8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff5e00' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* 海报容器，固定宽度，适合长图截图 */
+.poster {
+  width: 800px;
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(255, 94, 0, 0.1), 0 0 0 12px rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 顶部 Header */
+.header {
+  background: linear-gradient(135deg, var(--pri), var(--pink));
+  padding: 60px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50px; left: -50px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: -20px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,184,0,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header-subtitle {
+  color: rgba(255,255,255,0.9);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.header-title {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 48px;
+  color: #fff;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 2px;
+}
+
+/* 卡片列表区 */
+.cards-container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: linear-gradient(180deg, #fff 0%, #FFFDF8 100%);
+}
+
+/* 单个卡片 */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  border: 2px solid var(--pri-light);
+  box-shadow: 0 8px 24px rgba(255, 94, 0, 0.06);
+  padding: 30px;
+  position: relative;
+  transition: transform 0.2s;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--pri), var(--gold));
+  border-radius: 20px 20px 0 0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.card-num {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 28px;
+  color: var(--pri);
+  background: var(--pri-light);
+  width: 50px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 14px;
+}
+.card-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.card-scenario {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 24px;
+  text-align: justify;
+}
+
+.card-task {
+  background: linear-gradient(135deg, rgba(255,94,0,0.05), rgba(255,184,0,0.05));
+  border-left: 4px solid var(--pri);
+  padding: 20px;
+  border-radius: 12px;
+}
+.task-label {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--pri);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.task-content {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: justify;
+}
+
+/* 底部 Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  background: #fff;
+  border-top: 1px dashed #eee;
+  color: var(--mu);
+  font-size: 14px;
+  font-weight: 500;
+}
+.footer span {
+  color: var(--pri);
+  font-weight: 700;
+  font-family: 'ZCOOL KuaiLe', cursive;
+}
+
+</style>
+</head>
+<body>
+
+<div class="poster">
+  <!-- 头部 -->
+  <div class="header">
+    <div class="header-subtitle">TeacherYO社群首届教师黑客松大赛</div>
+    <div class="header-title">情境卡片 · 参与者版</div>
+  </div>
+
+  <!-- 卡片列表 -->
+  <div class="cards-container">
+    
+    <!-- 卡片 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">01</div>
+        <div class="card-title">一个知识点，三种学生</div>
+      </div>
+      <div class="card-scenario">
+        你正在教一个知识点。班里有三种状态的学生同时存在——一种已经会了、开始走神；一种跟得上、但不主动；一种卡住了、越听越迷糊。<br><br>
+        假设每个学生手上都有一台设备（手机/平板/电脑）。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          选你自己学科里的一个知识点，做一个东西，让这三种学生在同一个课堂里各自有事干、各自在成长——而不是让快的等慢的，也不是让慢的被拖着跑。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">02</div>
+        <div class="card-title">AI 时代的作业设计</div>
+      </div>
+      <div class="card-scenario">
+        你布置了一个作业——可能是一篇读后感、一份实验报告、一组计算题、一段英语作文。第二天收上来，你发现一大半答案“看起来还不错”，但你直觉告诉你：很多人压根没动脑，AI 帮他们写的。<br><br>
+        “防 AI”已经没意义了——AI 比抄还快。传统作业正在失效。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          选你自己学科里最常布置的一种作业类型，重新设计它——设计一种允许甚至鼓励用 AI，但学生必须动脑的作业或学习任务，并做出配套工具。不限学科。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">03</div>
+        <div class="card-title">出一道好题</div>
+      </div>
+      <div class="card-scenario">
+        期中考试，你要出一道综合题。要求：考的是真正的理解力，不是记忆力；学生没法靠刷题套路得分；改卷的时候能一眼看出学生到底懂没懂。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          做一个东西，帮任何学科的老师从一个知识点出发，生成一道考理解、考思维、不能靠背诵的好题，附带评分标准和常见错误分析。不限学科。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 4 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">04</div>
+        <div class="card-title">一切皆可学</div>
+      </div>
+      <div class="card-scenario">
+        你走在路上，看到一栋老建筑，突然想知道它的历史。你刷到一条新闻，里面有个概念你似懂非懂。你孩子指着天上的云问你“为什么有的云是平的有的云是一坨”。你在博物馆看到一幅画，想搞懂它到底好在哪里。<br><br>
+        这些瞬间，都是学习的入口。但大多数时候，你搜一下、看两行就过去了——好奇心来了又走了，什么也没留下。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          做一个东西，能把任何一个好奇的瞬间变成一段真正的学习——输入任何东西（一个问题、一张照片、一个概念、一段对话），它能帮你从好奇到真正搞懂，而不是给你一个百科式的标准答案。不限主题、不限身份、不限场景。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 5 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">05</div>
+        <div class="card-title">名师是怎么炼成的</div>
+      </div>
+      <div class="card-scenario">
+        你一定见过那种老师——同样的知识点、同样的学生，Ta 教完之后学生就是比别人班理解得更深。你知道 Ta 厉害，但说不清 Ta 到底厉害在哪。是学科功底更深？是提问方式更好？是更会读懂学生的状态？还是对“什么时候该讲、什么时候该等”有一种直觉？<br><br>
+        这些“厉害”如果说不清楚，就没法学、没法传、也没法让 AI 帮上忙。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          先想清楚——在你的学科里，一个名师到底比普通老师多了什么？从哪些维度可以拆解？然后，做一个东西，能沿着你想清楚的这些维度，帮助捕捉、呈现或培养一个老师的教学能力。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 6 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">06</div>
+        <div class="card-title">带一个人读懂一篇“读不下去”的东西</div>
+      </div>
+      <div class="card-scenario">
+        有一篇东西，学习者知道它很重要，但就是读不下去——可能是一篇文言文、一篇英语长文、一篇学术论文、一段复杂的证明推导、一本书的某个章节，甚至是一份技术文档。<br><br>
+        读不下去的原因各不相同：可能是生词太多，可能是背景知识不够，可能是逻辑链太长跟不上，也可能就是“看两行就走神”。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          做一个东西，能把任何一篇“读不下去”的材料，变成一个引导式的阅读体验——不是帮学习者读完（不是让 AI 给你总结），而是带着 Ta 一步步读进去、读懂。不限学科、不限材料类型。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 7 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">07</div>
+        <div class="card-title">从一道错题出发，找到学生真正卡在哪</div>
+      </div>
+      <div class="card-scenario">
+        一个学生做错了一道题。你看了一眼——错了。但“错了”这个信息几乎没用。真正有用的是：Ta 到底在哪一步走偏了？是这个概念从来没搞懂，还是搞懂了但忘了？是单独会但放到综合题就乱了，还是换个情境就不认识了？<br><br>
+        这四种情况，修复方式完全不同。但传统的错题分析只能告诉你“这道题考的是XX知识点，你不会”。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          做一个东西，从一道错题出发，帮老师或学生自己精准定位思维到底断在哪一步、断的是什么类型，并给出对应的修复方向。不限学科。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 8 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">08</div>
+        <div class="card-title">给一个“必须学但没人想学”的知识设计一个让人想试的东西</div>
+      </div>
+      <div class="card-scenario">
+        有一个知识点，所有人都知道它很重要，但学习者就是提不起兴趣——可能是英语语法、数学公式推导、化学方程式配平、历史事件年表、编程基础语法……每个学科都有这种“明知重要但就是无聊”的内容。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          选一个你学科里公认无聊但必须学的知识点，做一个东西，让学习者看到就想试试——可以是互动游戏、情境体验、角色扮演、闯关挑战、故事化包装，形式不限。目标只有一个：让人从“不得不学”变成“想试试”。不限学科。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 9 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">09</div>
+        <div class="card-title">为你的学生设计一个 AI 学习搭档</div>
+      </div>
+      <div class="card-scenario">
+        你班上有学生课后想复习和练习，但你不可能 24 小时在线辅导每一个人。你希望有一个 AI 能“代替你”，在学生课后练习的时候，按照你的教学理念和引导方式来陪学生——不是直接给答案，而是像你一样提问、引导、纠正。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          为你的学生设计一个课后 AI 学习搭档——它按照你的教学逻辑来工作，学生打开就能用。你来决定它怎么引导、怎么追问、什么时候给提示、什么时候让学生自己想。
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片 10 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">10</div>
+        <div class="card-title">给学生建一份“活的”学习画像</div>
+      </div>
+      <div class="card-scenario">
+        你带了一个班三年，对每个学生的了解比家长还深——谁擅长什么、谁卡在哪、谁需要鼓励才能动起来、谁一被当众点名就关机。但这些了解全存在你脑子里。下一个接班的老师第一天走进教室，面对四十个陌生的面孔，从零开始。你三年的理解，就这么消失了。<br><br>
+        而且，你对学生的理解只是你的视角——学生自己可能有完全不同的感受。这个落差本身，才是最有价值的信号。
+      </div>
+      <div class="card-task">
+        <div class="task-label">🎯 你的任务</div>
+        <div class="task-content">
+          做一个东西，能帮老师给学生建起一份“活的”学习画像——不只是成绩和分数，而是学习风格、认知卡点、有效的引导方式、情绪状态、成长轨迹。如果能同时听到老师和学生两边的声音，让两个视角的差距变得可见，那就更好了。
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>TeacherYO</span> · 探索教育与 AI 的无限可能
+  </div>
+</div>
+
+</body>
+</html>

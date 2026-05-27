@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师AI黑客松 · 赞助大红榜</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  body {
+    background-color: #8b0000;
+    background-image: radial-gradient(#b71c1c 15%, transparent 16%), radial-gradient(#b71c1c 15%, transparent 16%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  .board {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    border: 8px solid #ffd700;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,215,0,0.3);
+    width: 100%;
+    max-width: 600px;
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+  }
+  .board::before {
+    content: "🏆";
+    font-size: 48px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #8b0000;
+    border-radius: 50%;
+    padding: 10px;
+    border: 4px solid #ffd700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  h1 {
+    font-family: 'Noto Serif SC', serif;
+    color: #ffd700;
+    font-size: 46px;
+    margin: 20px 0 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    letter-spacing: 4px;
+  }
+  .subtitle {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    letter-spacing: 1px;
+  }
+  .total {
+    background: #ffd700;
+    color: #c62828;
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 16px 24px;
+    border-radius: 8px;
+    border-left: 4px solid #ffd700;
+    transition: transform 0.2s;
+  }
+  .item:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .item.top {
+    background: linear-gradient(90deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.05) 100%);
+    border-left: 6px solid #ffd700;
+    padding: 20px 24px;
+  }
+  .name {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .item.top .name {
+    font-size: 24px;
+    color: #ffd700;
+  }
+  .amount {
+    color: #ffd700;
+    font-size: 22px;
+    font-weight: 900;
+    font-family: monospace;
+  }
+  .item.top .amount {
+    font-size: 28px;
+  }
+  .footer {
+    margin-top: 40px;
+    color: #ffd700;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+  <div class="board">
+    <h1>赞助大红榜</h1>
+    <div class="subtitle">感谢以下“金主爸爸”的真金白银支持！</div>
+    <div class="total">当前总奖池：3200 元</div>
+    
+    <div class="list">
+      <div class="item top">
+        <div class="name">👑 深度实践Deepractice</div>
+        <div class="amount">¥ 1000</div>
+      </div>
+      <div class="item">
+        <div class="name">🔥 炎鑫</div>
+        <div class="amount">¥ 300</div>
+      </div>
+      <div class="item">
+        <div class="name">🚀 上海拓扑智联教育科技有限公司</div>
+        <div class="amount">¥ 300</div>
+      </div>
+      <div class="item">
+        <div class="name">💧 止水</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">🐱 金旻</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">👑 领心教育</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">🏢 教育创造社</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">😎 TeacherYo (我本人)</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">🐈 十三只猫</div>
+        <div class="amount">¥ 200</div>
+      </div>
+      <div class="item">
+        <div class="name">👨‍🏫 大卫老师</div>
+        <div class="amount">¥ 100</div>
+      </div>
+      <div class="item">
+        <div class="name">👩‍🏫 zoe老师</div>
+        <div class="amount">¥ 100</div>
+      </div>
+      <div class="item">
+        <div class="name">🔥 黄火火</div>
+        <div class="amount">¥ 100</div>
+      </div>
+      <div class="item">
+        <div class="name">✨ 凡人修AI传</div>
+        <div class="amount">¥ 100</div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      * 赞助商老板们到时也可以凭自己本事参赛拿奖金哈 ~
+    </div>
+  </div>
+</body>
+</html>

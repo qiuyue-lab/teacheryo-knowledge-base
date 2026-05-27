@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026教师黑客松·作品巡展周</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff5f5; /* 喜庆的浅红/粉背景 */
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --accent: #e11d48; /* 喜庆红 */
+            --accent-hover: #be123c;
+            --date-bg: #f59e0b; /* 活力橙 */
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .poster-container {
+            background-color: var(--bg-color);
+            max-width: 480px;
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.15);
+            border: 2px solid #ffe4e6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f43f5e 0%, #ea580c 100%);
+            padding: 40px 24px 30px;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .location-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 16px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .day-section {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .day-section::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: #fecdd3;
+            z-index: 1;
+        }
+
+        .day-section:last-child::before {
+            display: none;
+        }
+
+        .date-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date-dot {
+            width: 32px;
+            height: 32px;
+            background: var(--date-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            margin-right: 12px;
+            box-shadow: 0 0 0 4px var(--bg-color);
+        }
+
+        .date-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-left: 44px;
+            margin-bottom: 16px;
+            border: 1px solid #ffe4e6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .session-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1);
+            border-color: #fda4af;
+        }
+
+        .time-badge {
+            color: #ea580c;
+            font-size: 15px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .session-title {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+
+        .authors {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .playful-text {
+            background: #fff1f2;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .playful-text strong {
+            color: var(--accent);
+        }
+
+        .btn {
+            display: block;
+            background: linear-gradient(to right, #f43f5e, #e11d48);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(225, 29, 72, 0.2);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+            border-top: 1px solid #ffe4e6;
+            background: #fff;
+        }
+
+        /* Specific Day Colors */
+        .day-1 .date-dot { background: #f43f5e; }
+        .day-2 .date-dot { background: #f59e0b; }
+        .day-3 .date-dot { background: #10b981; }
+    
+        .qr-section {
+            text-align: center;
+            background: #fff;
+            border-top: 2px dashed #fecdd3;
+            padding: 28px 24px;
+        }
+        .qr-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: #e11d48;
+            margin-bottom: 16px;
+        }
+        .qr-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 12px;
+            border: 3px solid #fecdd3;
+            display: block;
+            margin: 0 auto 12px;
+        }
+        .qr-url {
+            font-size: 12px;
+            color: #94a3b8;
+            word-break: break-all;
+        }
+
+        </style>
+</head>
+<body>
+
+<div class="poster-container">
+    <div class="header">
+        <h1>🎊 教师黑客松·作品巡展 🎊</h1>
+        <p>零代码手搓应用，看看老师们的脑洞！</p>
+        <div class="location-badge">
+            📍 分享地点：TeacherYo的社群
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Day 1 -->
+        <div class="day-section day-1">
+            <div class="date-header">
+                <div class="date-dot">四</div>
+                <div class="date-title">4月16日 · 创意之夜</div>
+            </div>
+
+            <div class="session-card">
+                <div class="time-badge">⏰ 21:00 - 21:30</div>
+                <div class="session-title">🎨 HTML1 作品思路分享</div>
+                <div class="authors">👩‍🏫 分享人：三水 & Alice</div>
+                <div class="playful-text">
+                    <strong>囍·👯‍♀️＋👯‍♀️=囍</strong><br>
+                    💌送呈好友：所有人<br>
+                    🎊良辰已定 吉日待访💞<br>
+                    诚挚邀请您一起听<strong>“科学探究自适应实验室”</strong>思路分享！
+                </div>
+                <a href="https://sanshui-alice.yunmind.cn/html1/" target="_blank" class="btn">👉 提前体验作品</a>
+            </div>
+
+            <div class="session-card">
+                <div class="time-badge">⏰ 21:30 - 22:00</div>
+                <div class="session-title">📜 HTML7 作品分享会</div>
+                <div class="authors">👨‍🏫 分享人：Iris & 雷君</div>
+                <div class="playful-text">
+                    ✨诚邀各位好友共聚✨<br>
+                    邀您一起参与分享交流，手搓<strong>“文言文拆解翻译官”</strong>的思路！
+                </div>
+                <a href="https://app.520ai.cc/3w/lickies/wenyanwen/" target="_blank" class="btn">👉 提前体验作品</a>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-section day-2">
+            <div class="date-header">
+                <div class="date-dot">五</div>
+                <div class="date-title">4月17日 · 趣味之夜</div>
+            </div>
+
+            <div class="session-card">
+                <div class="time-badge">⏰ 21:00 - 21:30</div>
+                <div class="session-title">💰 HTML5 作品分享会</div>
+                <div class="authors">👨‍🏫 分享人：张思嘉 & Lasso</div>
+                <div class="playful-text">
+                    ✨诚邀各位好友共聚✨<br>
+                    邀您一起解锁<strong>“个税段位挑战”</strong>H5创作思路！
+                </div>
+                <a href="http://113.45.66.174:8087" target="_blank" class="btn">👉 提前体验作品</a>
+            </div>
+
+            <div class="session-card">
+                <div class="time-badge">⏰ 21:30 - 22:00</div>
+                <div class="session-title">👾 角色1 作品分享会</div>
+                <div class="authors">👩‍🏫 分享人：jian & 希希</div>
+                <div class="playful-text">
+                    ✨诚邀各位好友共聚✨<br>
+                    邀您一起参与分享交流，手搓<strong>“AI桌宠小咕噜”</strong>的思路！
+                </div>
+                <a href="https://pan.baidu.com/s/1L1V3UMR77ETaD5_0JdmYGA?pwd=h413" target="_blank" class="btn">👉 下载体验 (提取码: h413)</a>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-section day-3">
+            <div class="date-header">
+                <div class="date-dot">六</div>
+                <div class="date-title">4月18日 · 情绪之夜</div>
+            </div>
+
+            <div class="session-card">
+                <div class="time-badge">⏰ 21:00 - 21:30</div>
+                <div class="session-title">🌈 HTML4 作品分享会</div>
+                <div class="authors">👩‍🏫 分享人：Cecilia陈老师 & 蒙七君</div>
+                <div class="playful-text">
+                    🌈诚邀各位好友共聚🌈<br>
+                    邀您一起参与分享交流<strong>《学英语？拍马屁》</strong>的开发思路！
+                </div>
+                <a href="https://app-avvc6oj8rt35.appmiaoda.com" target="_blank" class="btn">👉 提前体验作品</a>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="qr-section">
+        <p class="qr-text">📱 扫码体验 HTML1 · 科学探究自适应实验室</p>
+        <img src="data:image/png;base64,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PqacKaatleJ276X+pzPv7iHl8wWSdOwRIECAwChggIw0NggQIEAgCRggScceAQIECIwCBshIY4MAAQIEkoABknTsESBAgMAoYICMNDYIECBAIAm8zDXe1OQ77O2+Upfypat9aW9yTLWmmNX61EeqlfZSvTYu5bxrb3I66qe95swpJtVqLO6slaxSH+lcyWPK2cSk3o+9qdYq7tg/+y/lO/v9as0XyErIPgECBAicChggpywWCRAgQGAlYICshOwTIECAwKmAAXLKYpEAAQIEVgIGyErIPgECBAicChggpywWCRAgQGAl4BrvSug399MVvt9M8V8/253vv5L/z/9ItdK1vyYuxfxPW1v+Z+p/S4HfSNKeeXfvqY9UK8VNx08xqdaUr11PfaScu3ts+7izx1Rr2vMFMslYJ0CAAIEoYIBEHpsECBAgMAkYIJOMdQIECBCIAgZI5LFJgAABApOAATLJWCdAgACBKGCARB6bBAgQIDAJvMw13t3X5qYD/8l622NzhS/VavKlc7e1Ulyq1+ylWslj2kv5Un9TviOmydnEpP6u2Gt6TE6pxzZuypl6T7XSXsq5u48p37E+9dj0l+qkPV8gScceAQIECIwCBshIY4MAAQIEkoABknTsESBAgMAoYICMNDYIECBAIAkYIEnHHgECBAiMArffwppuDowdvtBG6r25+dDErDhSzqn/af2o1eRb9Tjtp1pTzLGe4qazTeurfE2tFJPOlXpMcc3enbVSf7ut2nO1faSzNXup/1fo0RdI81TFECBAgMA/BoiXgAABAgQqAQOkYhNEgAABAgaId4AAAQIEKgEDpGITRIAAAQIGiHeAAAECBCqBbz+ugn2vIgURIECAwKMFfIE8+vE7PAECBHoBA6S3E0mAAIFHCxggj378Dk+AAIFewADp7UQSIEDg0QIGyKMfv8MTIECgFzBAejuRBAgQeLSAAfLox+/wBAgQ6AUMkN5OJAECBB4tYIA8+vE7PAECBHoBA6S3E0mAAIFHCxggj378Dk+AAIFewADp7UQSIEDg0QIGyKMfv8MTIECgFzBAejuRBAgQeLSAAfLox+/wBAgQ6AUMkN5OJAECBB4tYIA8+vE7PAECBHoBA6S3E0mAAIFHCxggj378Dk+AAIFe4P8BAFYFWFOFvkgAAAAASUVORK5CYII=" class="qr-img" alt="QR Code"/>
+        <p class="qr-url">https://sanshui-alice.yunmind.cn/html1/</p>
+    </div>
+
+    <div class="footer">
+        💡 强烈建议：听分享前，先点开链接玩一下他们的作品！<br>
+        © 2026 TeacherYo AI+教育社群
+    </div>
+</div>
+
+</body>
+</html>

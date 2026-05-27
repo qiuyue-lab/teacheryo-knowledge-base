@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师黑客松·作品分享</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #C8293A;
+    --deep-red: #8B1A24;
+    --gold: #D4A843;
+    --light-gold: #F5D98A;
+    --cream: #FDF6E8;
+    --dark: #2C1A10;
+    --pink: #F7D4D4;
+  }
+
+  body {
+    background: #1a0a08;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 40px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  /* 页面标题 */
+  .page-header {
+    text-align: center;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .page-header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 26px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(212,168,67,0.5);
+  }
+  .page-header p {
+    font-size: 13px;
+    color: rgba(212,168,67,0.6);
+    margin-top: 6px;
+    letter-spacing: 2px;
+  }
+
+  /* 卡片容器 */
+  .card {
+    width: 480px;
+    max-width: 100%;
+    background: var(--cream);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 2px var(--gold);
+  }
+
+  /* 卡片顶部装饰条 */
+  .card-top-bar {
+    background: linear-gradient(135deg, var(--deep-red) 0%, var(--red) 50%, #E8384A 100%);
+    padding: 20px 28px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-top-bar::before {
+    content: '囍';
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-size: 120px;
+    color: rgba(255,255,255,0.07);
+    font-family: 'Noto Serif SC', serif;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .card-top-bar::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--light-gold), var(--gold));
+  }
+
+  .event-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 3px 12px;
+    color: white;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    color: white;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+  .card-subtitle {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 分享者区域 */
+  .sharers-section {
+    background: linear-gradient(180deg, #FFF8F0 0%, var(--cream) 100%);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px dashed rgba(200,41,58,0.2);
+  }
+  .xixi-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--red), var(--deep-red));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(200,41,58,0.3);
+  }
+  .sharer-info { flex: 1; }
+  .sharer-label {
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+  .sharer-names {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-top: 2px;
+  }
+
+  /* 主要信息区 */
+  .info-section {
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .info-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #FFF0F0, #FFE0E0);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    border: 1px solid rgba(200,41,58,0.1);
+  }
+  .info-content { flex: 1; }
+  .info-label {
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .info-value {
+    font-size: 14px;
+    color: var(--dark);
+    margin-top: 2px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .info-value.url {
+    color: #1a6fa6;
+    word-break: break-all;
+    font-size: 13px;
+  }
+  .info-value.highlight {
+    color: var(--red);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  /* 底部邀请语 */
+  .card-footer {
+    background: linear-gradient(135deg, var(--red) 0%, var(--deep-red) 100%);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--light-gold), transparent);
+  }
+  .footer-text {
+    color: white;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .footer-text strong {
+    color: var(--light-gold);
+    font-size: 14px;
+  }
+  .footer-emoji {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  /* 角标装饰 */
+  .corner-deco {
+    position: absolute;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+  .corner-deco.top-right {
+    top: 12px; right: 28px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  /* 日期标签 */
+  .day-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    color: var(--light-gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* 分隔线 */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px;
+    margin: -4px 0;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,41,58,0.2), transparent);
+  }
+  .divider-icon { font-size: 12px; color: var(--gold); }
+
+  /* 占位卡片样式 */
+  .card.pending .card-top-bar {
+    background: linear-gradient(135deg, #5a5a6e 0%, #3d3d50 100%);
+  }
+  .card.pending .card-top-bar::before {
+    content: '？';
+    color: rgba(255,255,255,0.05);
+  }
+  .card.pending .card-footer {
+    background: linear-gradient(135deg, #5a5a6e 0%, #3d3d50 100%);
+  }
+  .pending-notice {
+    background: linear-gradient(135deg, #f0f0f8, #e8e8f0);
+    border: 2px dashed #9999bb;
+    border-radius: 12px;
+    margin: 18px 28px;
+    padding: 20px;
+    text-align: center;
+    color: #666688;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .pending-notice .notice-icon { font-size: 32px; margin-bottom: 8px; }
+
+  /* 场次编号 */
+  .session-num {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 48px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>囍 教师黑客松 · 作品分享周</h1>
+  <p>2026年4月16日—18日 · yo老师的AI➕教育群</p>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--  周四 · 第1场                           -->
+<!-- ═══════════════════════════════════════ -->
+<div class="card" id="thu-1">
+  <div class="card-top-bar">
+    <div class="event-badge">🎊 作品分享 · 第1场</div>
+    <div class="corner-deco top-right">囍</div>
+    <div class="card-title">
+      HTML1 作品思路分享
+      <span class="day-tag">周四</span>
+    </div>
+    <div class="card-subtitle">科学探究自适应实验室 · 无痕分流设计</div>
+    <div class="session-num">壹</div>
+  </div>
+
+  <div class="sharers-section">
+    <div class="xixi-icon">👯‍♀️</div>
+    <div class="sharer-info">
+      <div class="sharer-label">✦ 分享嘉宾</div>
+      <div class="sharer-names">三水 &amp; Alice</div>
+    </div>
+    <div style="font-size:11px;color:#999;text-align:right;line-height:1.6;">
+      囍·👯‍♀️＋👯‍♀️=囍<br>
+      <span style="color:var(--red);font-weight:600;">诚挚邀请您</span>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-icon">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-row">
+      <div class="info-icon">🗓️</div>
+      <div class="info-content">
+        <div class="info-label">时间</div>
+        <div class="info-value highlight">2026年4月16日 · 周四 21:00–21:30</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">🏠</div>
+      <div class="info-content">
+        <div class="info-label">地点</div>
+        <div class="info-value">yo老师的 AI➕教育群</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">🔗</div>
+      <div class="info-content">
+        <div class="info-label">体验地址（欢迎提前试用）</div>
+        <div class="info-value url">https://sanshui-alice.yunmind.cn/html1/</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">💌</div>
+      <div class="info-content">
+        <div class="info-label">邀请范围</div>
+        <div class="info-value">送呈好友：所有人 · 良辰已定，吉日待访 💞</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="footer-text">
+      欢迎大家提前试用<br>
+      <strong>多多反馈，我们不见不散！</strong>
+    </div>
+    <div class="footer-emoji">❤️</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--  周五 · 第2场（占位）                   -->
+<!-- ═══════════════════════════════════════ -->
+<div class="card pending" id="fri-1">
+  <div class="card-top-bar">
+    <div class="event-badge">🎊 作品分享 · 第2场</div>
+    <div class="corner-deco top-right">囍</div>
+    <div class="card-title">
+      待定 · 上场
+      <span class="day-tag">周五</span>
+    </div>
+    <div class="card-subtitle">等待信息补充中…</div>
+    <div class="session-num">貳</div>
+  </div>
+  <div class="pending-notice">
+    <div class="notice-icon">📋</div>
+    <div>周五上场信息待补充<br><span style="font-size:12px;color:#aaa;">请提供：分享者、作品名称、时间、体验链接</span></div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-text">
+      2026年4月17日 · 周五<br>
+      <strong>时间待确认</strong>
+    </div>
+    <div class="footer-emoji">💫</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--  周五 · 第3场（占位）                   -->
+<!-- ═══════════════════════════════════════ -->
+<div class="card pending" id="fri-2">
+  <div class="card-top-bar">
+    <div class="event-badge">🎊 作品分享 · 第3场</div>
+    <div class="corner-deco top-right">囍</div>
+    <div class="card-title">
+      待定 · 下场
+      <span class="day-tag">周五</span>
+    </div>
+    <div class="card-subtitle">等待信息补充中…</div>
+    <div class="session-num">叁</div>
+  </div>
+  <div class="pending-notice">
+    <div class="notice-icon">📋</div>
+    <div>周五下场信息待补充<br><span style="font-size:12px;color:#aaa;">请提供：分享者、作品名称、时间、体验链接</span></div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-text">
+      2026年4月17日 · 周五<br>
+      <strong>时间待确认</strong>
+    </div>
+    <div class="footer-emoji">💫</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--  周六 · 第4场（占位）                   -->
+<!-- ═══════════════════════════════════════ -->
+<div class="card pending" id="sat-1">
+  <div class="card-top-bar">
+    <div class="event-badge">🎊 作品分享 · 第4场</div>
+    <div class="corner-deco top-right">囍</div>
+    <div class="card-title">
+      待定
+      <span class="day-tag">周六</span>
+    </div>
+    <div class="card-subtitle">等待信息补充中…</div>
+    <div class="session-num">肆</div>
+  </div>
+  <div class="pending-notice">
+    <div class="notice-icon">📋</div>
+    <div>周六第1场信息待补充<br><span style="font-size:12px;color:#aaa;">请提供：分享者、作品名称、时间、体验链接</span></div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-text">
+      2026年4月18日 · 周六<br>
+      <strong>时间待确认</strong>
+    </div>
+    <div class="footer-emoji">💫</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--  周六 · 第5场（占位）                   -->
+<!-- ═══════════════════════════════════════ -->
+<div class="card pending" id="sat-2">
+  <div class="card-top-bar">
+    <div class="event-badge">🎊 作品分享 · 第5场</div>
+    <div class="corner-deco top-right">囍</div>
+    <div class="card-title">
+      待定
+      <span class="day-tag">周六</span>
+    </div>
+    <div class="card-subtitle">等待信息补充中…</div>
+    <div class="session-num">伍</div>
+  </div>
+  <div class="pending-notice">
+    <div class="notice-icon">📋</div>
+    <div>周六第2场信息待补充<br><span style="font-size:12px;color:#aaa;">请提供：分享者、作品名称、时间、体验链接</span></div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-text">
+      2026年4月18日 · 周六<br>
+      <strong>时间待确认</strong>
+    </div>
+    <div class="footer-emoji">💫</div>
+  </div>
+</div>
+
+</body>
+</html>

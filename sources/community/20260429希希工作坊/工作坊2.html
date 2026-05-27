@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「属于自己的APP」线上工作坊</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: #faf8f5;
+    color: #3a3a3a;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3e2 50%, #fdebd0 100%);
+    border-bottom: 1px solid #f0e6d6;
+    position: relative;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e17055, #d63031, #e84393);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  .header .quote {
+    font-size: 1rem;
+    color: #888;
+    font-style: italic;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .header .quote strong { color: #e17055; font-style: normal; }
+  .reset-btn {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    padding: 6px 14px;
+    background: rgba(225,112,85,0.08);
+    color: #e17055;
+    border: 1px solid rgba(225,112,85,0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: rgba(225,112,85,0.15); }
+
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: #fefcfa;
+    padding: 0 20px;
+    border-bottom: 1px solid #f0e6d6;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 14px 16px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #aaa;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .nav-tab:hover { color: #666; }
+  .nav-tab.active {
+    color: #e17055;
+    border-bottom-color: #e17055;
+  }
+
+  .main {
+    display: flex;
+    min-height: calc(100vh - 200px);
+  }
+
+  .slides-panel {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+  }
+  .slide {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .slide h2 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    color: #e17055;
+  }
+  .slide .time-badge {
+    display: inline-block;
+    background: rgba(225,112,85,0.1);
+    color: #e17055;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+  }
+  .slide .desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 20px;
+    outline: none;
+    border-radius: 8px;
+    padding: 4px;
+    transition: background 0.2s;
+  }
+  .slide .desc:hover { background: rgba(225,112,85,0.03); }
+  .slide .desc:focus { background: rgba(225,112,85,0.05); }
+  .slide .desc strong { color: #3a3a3a; }
+  .editable-hint {
+    display: none;
+    font-size: 0.7rem;
+    color: #ccc;
+    margin-top: -16px;
+    margin-bottom: 12px;
+  }
+  .desc:hover + .editable-hint,
+  .desc:focus + .editable-hint { display: block; }
+
+  /* Script toggle */
+  .script-toggle {
+    margin: 16px 0;
+    border: none;
+  }
+  .script-toggle summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #bbb;
+    padding: 8px 0;
+    user-select: none;
+    list-style: none;
+    transition: color 0.2s;
+  }
+  .script-toggle summary::-webkit-details-marker { display: none; }
+  .script-toggle summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+  }
+  .script-toggle[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .script-toggle summary:hover { color: #e17055; }
+  .script-toggle .script-box {
+    background: #fff8f3;
+    border-left: 3px solid #e17055;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0 0 0;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #555;
+    outline: none;
+  }
+
+  .img-placeholder {
+    width: 100%;
+    min-height: 240px;
+    background: #fefcfa;
+    border: 2px dashed #e0d5c8;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 0.9rem;
+    margin: 16px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+  .img-placeholder:hover {
+    border-color: #e17055;
+    background: #fff8f3;
+  }
+  .img-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .img-placeholder input[type="file"] { display: none; }
+  .img-placeholder .placeholder-text { pointer-events: none; z-index: 1; text-align: center; }
+  .img-placeholder.has-image .placeholder-text { display: none; }
+
+  .step-list {
+    list-style: none;
+    counter-reset: step;
+  }
+  .step-list li {
+    counter-increment: step;
+    padding: 12px 0 12px 40px;
+    position: relative;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 28px;
+    height: 28px;
+    background: rgba(225,112,85,0.1);
+    color: #e17055;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .tip-box {
+    background: #fff8f3;
+    border: 1px solid #f0e6d6;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    outline: none;
+    min-height: 60px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #555;
+  }
+  .tip-box:empty::before {
+    content: '💡 点击这里写核心提示...';
+    color: #ccc;
+    pointer-events: none;
+  }
+
+  .template-card {
+    background: #fff8f3;
+    border: 1px solid #f0e6d6;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .template-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e17055;
+    margin-bottom: 16px;
+  }
+  .template-field {
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #f0e6d6;
+  }
+  .template-field:last-child { margin-bottom: 0; }
+  .template-field .field-label {
+    font-size: 0.8rem;
+    color: #bbb;
+    margin-bottom: 4px;
+  }
+  .template-field .field-input {
+    outline: none;
+    min-height: 1.5em;
+    font-size: 1rem;
+    color: #3a3a3a;
+  }
+
+  .mvp-box {
+    background: linear-gradient(135deg, #fff7ed, #fef3e2);
+    border: 2px solid #e17055;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .mvp-box .mvp-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e17055;
+    margin-bottom: 8px;
+  }
+  .mvp-box .mvp-desc {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .mvp-box .mvp-input {
+    background: #fff;
+    border: 1px solid #f0e6d6;
+    border-radius: 8px;
+    padding: 12px 16px;
+    outline: none;
+    min-height: 1.5em;
+    font-size: 1rem;
+    color: #3a3a3a;
+    text-align: left;
+  }
+
+  .slide-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0e6d6;
+  }
+  .slide-nav button {
+    padding: 10px 24px;
+    border: 1px solid rgba(225,112,85,0.3);
+    background: transparent;
+    color: #e17055;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+  .slide-nav button:hover {
+    background: rgba(225,112,85,0.08);
+  }
+  .slide-nav button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .whiteboard-panel {
+    width: 420px;
+    background: #fffdf9;
+    border-left: 1px solid #f0e6d6;
+    display: flex;
+    flex-direction: column;
+  }
+  .wb-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0e6d6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wb-header h3 {
+    font-size: 1.1rem;
+    color: #e17055;
+  }
+  .wb-toolbar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .wb-toolbar .color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .wb-toolbar .color-dot:hover,
+  .wb-toolbar .color-dot.active {
+    border-color: #3a3a3a;
+    transform: scale(1.15);
+  }
+  .wb-toolbar .size-btn {
+    padding: 3px 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: #666;
+    transition: all 0.2s;
+  }
+  .wb-toolbar .size-btn:hover,
+  .wb-toolbar .size-btn.active {
+    border-color: #e17055;
+    color: #e17055;
+  }
+  .wb-toolbar .img-btn {
+    padding: 3px 10px;
+    background: rgba(225,112,85,0.1);
+    color: #e17055;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .wb-toolbar .img-btn:hover {
+    background: rgba(225,112,85,0.2);
+  }
+  .wb-toolbar .clear-btn {
+    padding: 3px 10px;
+    background: #fff;
+    color: #ccc;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+  .wb-toolbar .clear-btn:hover {
+    color: #e17055;
+    border-color: #e17055;
+  }
+
+  .wb-canvas {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .wb-canvas .wb-editor {
+    width: 100%;
+    min-height: 100%;
+    outline: none;
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #3a3a3a;
+    cursor: text;
+  }
+  .wb-canvas .wb-editor:empty::before {
+    content: '在这里自由书写想法、粘贴图片...';
+    color: #ccc;
+    pointer-events: none;
+  }
+  .wb-canvas .wb-editor img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 8px 0;
+    display: block;
+  }
+
+  .metaphor-cards {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .metaphor-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #f0e6d6;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .metaphor-card .mc-icon { font-size: 2rem; margin-bottom: 8px; }
+  .metaphor-card .mc-label { font-weight: 700; color: #e17055; font-size: 0.95rem; margin-bottom: 4px; }
+  .metaphor-card .mc-desc { font-size: 0.85rem; color: #888; line-height: 1.4; }
+
+  @media (max-width: 900px) {
+    .main { flex-direction: column; }
+    .whiteboard-panel {
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid #f0e6d6;
+    }
+    .metaphor-cards { flex-direction: column; }
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎨 「属于自己的APP」线上工作坊</h1>
+  <div class="quote">
+    伍尔夫说：你要有一间自己的房间，才能写出自己的故事。<br>
+    现在，你需要一个自己的想法，<strong>AI会帮你盖出那间房。</strong>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">🔄 重置为默认</button>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+  <div class="nav-tab active" data-index="0">🌙 开场</div>
+  <div class="nav-tab" data-index="1">👀 看见</div>
+  <div class="nav-tab" data-index="2">💡 碰撞</div>
+  <div class="nav-tab" data-index="3">🔗 过渡</div>
+  <div class="nav-tab" data-index="4">🎬 前端</div>
+  <div class="nav-tab" data-index="5">🎬 完善</div>
+  <div class="nav-tab" data-index="6">🎬 调试</div>
+  <div class="nav-tab" data-index="7">🔨 动手</div>
+  <div class="nav-tab" data-index="8">🎬 打包</div>
+  <div class="nav-tab" data-index="9">🎤 分享</div>
+</div>
+
+<div class="main">
+
+<div class="slides-panel">
+
+  <!-- Slide 0: 开场 -->
+  <div class="slide active" data-slide="0">
+    <h2>🌙 开场引入</h2>
+    <span class="time-badge">5 min</span>
+    <div class="desc" contenteditable="true" data-key="s0-desc">
+      今天两个小时结束的时候，你会带走一个<strong>属于自己的APP</strong>——或者至少是一个半成品，加上一套你完全心中有数的制作流程。
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s0-script">
+        英国有个作家叫伍尔夫，她说过一句很有名的话：<strong>一个人要创造，首先需要一间属于自己的房间。</strong><br><br>
+        以前我们普通人想做一个APP，没有这间"房间"——不会写代码，想法只能停在脑子里。<br>
+        但现在，AI给了我们这间房间。<strong>你只需要带着你的想法走进去。</strong>
+      </div>
+    </details>
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div class="img-placeholder" style="flex:1; min-width:200px; min-height:200px" onclick="this.querySelector('input').click()">
+        <div class="placeholder-text">📷 开场图片 1<br><small>点击插入</small></div>
+        <input type="file" accept="image/*" onchange="previewImg(this)">
+      </div>
+      <div class="img-placeholder" style="flex:1; min-width:200px; min-height:200px" onclick="this.querySelector('input').click()">
+        <div class="placeholder-text">📷 开场图片 2<br><small>点击插入</small></div>
+        <input type="file" accept="image/*" onchange="previewImg(this)">
+      </div>
+    </div>
+    <div class="img-placeholder" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 开场图片 3<br><small>（可选）点击插入</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button disabled>← 上一步</button>
+      <button onclick="goSlide(1)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 1: 看见 -->
+  <div class="slide" data-slide="1">
+    <h2>👀 Check in：看见</h2>
+    <span class="time-badge">10 min</span>
+
+    <div style="background:#fff8f3; border-left:3px solid #e17055; padding:16px 20px; border-radius:0 8px 8px 0; margin:16px 0; font-size:0.95rem; line-height:1.8; color:#555;">
+      <div style="font-weight:700; color:#e17055; margin-bottom:8px;">✍️ 先写下你的想法——有些人是带着目标来的！</div>
+      我的一句话：「我想做一个 <span contenteditable="true" data-key="s1-idea" style="outline:none; border-bottom:1px dashed #e17055; color:#e17055; padding:0 8px; min-width:200px; display:inline-block;">______________</span> 的APP」
+    </div>
+
+    <div class="desc" contenteditable="true" data-key="s1-desc">
+      <strong>还没有想法？没关系，我们用照片来找灵感 👇</strong><br><br>
+      打开手机相册，找<strong>两张让你觉得有感觉的照片</strong>。<br>
+      什么感觉都行——喜欢的、烦的、好笑的、好看的、莫名其妙的都可以。<br><br>
+      <strong>每个人都</strong>把其中一张照片分享到群里。<br>
+      <strong>每个人都</strong>在群里选一张你喜欢的照片。
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s1-script">
+        如果你已经有想做的APP，太好了，先写下来！<br>
+        还没有想法的也没关系——我们用照片来找灵感。<br><br>
+        现在请大家打开手机相册，找<strong>两张让你有感觉的照片</strong>。<br>
+        什么感觉都行——喜欢的、烦的、好笑的、好看的、莫名其妙的都可以。<br>
+        给大家3分钟。找到以后把其中一张发到群里，然后在群里选一张你喜欢的别人的照片。
+      </div>
+    </details>
+    <div class="desc" style="margin-bottom:8px;"><strong>我的示范：</strong></div>
+    <div style="display:flex; gap:12px;">
+      <div class="img-placeholder" style="flex:1; min-height:180px" onclick="this.querySelector('input').click()">
+        <div class="placeholder-text">📷 我的照片 1<br><small>点击插入</small></div>
+        <input type="file" accept="image/*" onchange="previewImg(this)">
+      </div>
+      <div class="img-placeholder" style="flex:1; min-height:180px" onclick="this.querySelector('input').click()">
+        <div class="placeholder-text">📷 我在群里选的照片 2<br><small>点击插入</small></div>
+        <input type="file" accept="image/*" onchange="previewImg(this)">
+      </div>
+    </div>
+    <div style="text-align:right; font-size:0.85rem; color:#bbb; margin:-8px 0 12px; padding-right:8px;">
+      照片 2 提供者：<span contenteditable="true" data-key="s1-provider" style="color:#e17055; outline:none; border-bottom:1px dashed #e17055; padding:0 4px;">____</span>
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(0)">← 上一步</button>
+      <button onclick="goSlide(2)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 2: 碰撞 -->
+  <div class="slide" data-slide="2">
+    <h2>💡 碰撞</h2>
+    <span class="time-badge">10 min</span>
+    <div class="desc" contenteditable="true" data-key="s2-desc">
+      三轮碰撞，把你的想法从模糊变成可以动手的方案 👇
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s2-script">
+        接下来我们做三轮碰撞。<br>
+        第一轮，跟AI聊聊你的想法，让它帮你想想怎么做、有哪些功能可以加。<br>
+        第二轮，跟身边的伙伴碰一碰，看看别人怎么想的，互相启发。<br>
+        最后，整理出你的最终方案。
+      </div>
+    </details>
+
+    <div class="template-card" style="margin-bottom:16px;">
+      <div class="card-title">🤖 碰撞 1：与AI碰撞</div>
+      <div style="font-size:0.85rem; color:#888; margin-bottom:10px;">把你的想法告诉AI（飞象老师/ChatGPT/豆包……），让它帮你想想：打开APP第一眼看到什么？有哪些功能？怎么交互？</div>
+      <div class="template-field">
+        <div class="field-input" contenteditable="true" data-key="s2-ai" style="min-height:80px;"></div>
+      </div>
+    </div>
+
+    <div class="template-card" style="margin-bottom:16px;">
+      <div class="card-title">👥 碰撞 2：和大家碰撞</div>
+      <div style="font-size:0.85rem; color:#888; margin-bottom:10px;">听听别人的想法，说说你的——有没有让你眼前一亮的？有没有可以借鉴的？</div>
+      <div class="template-field">
+        <div class="field-input" contenteditable="true" data-key="s2-peer" style="min-height:80px;"></div>
+      </div>
+    </div>
+
+    <div class="template-card" style="margin-bottom:16px; border-color:#e17055;">
+      <div class="card-title">✅ 我最后的方案</div>
+      <div style="font-size:0.85rem; color:#888; margin-bottom:10px;">整理你的最终想法。想一想：技术上能实现吗？<br>⚠️ 几个前提：<strong>不接入云端/服务器</strong>，做一个<strong>小型、轻量化</strong>的APP——工作坊时间有限，先把核心做好！</div>
+      <div class="template-field">
+        <div class="field-input" contenteditable="true" data-key="s2-final" style="min-height:80px;"></div>
+      </div>
+    </div>
+
+    <div class="mvp-box">
+      <div class="mvp-title">🎯 确定你的 MVP</div>
+      <div class="mvp-desc">MVP = 最小可行产品。如果只能保留<strong>一个核心功能</strong>，你会留哪个？<br>先把这一个做好，其他的后面再加！</div>
+      <div class="mvp-input" contenteditable="true" data-key="s2-mvp"></div>
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(1)">← 上一步</button>
+      <button onclick="goSlide(3)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 3: 过渡 -->
+  <div class="slide" data-slide="3">
+    <h2>🔗 过渡</h2>
+    <div class="desc" contenteditable="true" data-key="s3-desc">
+      把自己的想法变成真的！<br><br>
+      <strong>项目落地四部曲：</strong>
+      <ol class="step-list" style="margin-top:16px;">
+        <li>用<strong>飞象老师</strong>把APP界面的HTML做出来</li>
+        <li>用<strong>Cursor</strong>帮你把代码写出来——AI来写</li>
+        <li>在<strong>Android Studio 模拟器</strong>上测试效果</li>
+        <li>最后<strong>打包</strong>成安装包，装到手机上</li>
+      </ol>
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s3-script">
+        好，现在每个人都有了自己的想法。接下来就是把它变成真的。<br><br>
+        听起来很多步骤？没关系，我现在给大家完整演示一遍。<br>
+        你会发现——<strong>其实就这么简单。</strong>
+      </div>
+    </details>
+    <div class="slide-nav">
+      <button onclick="goSlide(2)">← 上一步</button>
+      <button onclick="goSlide(4)">进入演示 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 4: 演示-前端 -->
+  <div class="slide" data-slide="4">
+    <h2>🎬 演示 · 前端</h2>
+    <div class="desc" contenteditable="true" data-key="s4-desc">
+      <strong>飞象老师的文件包含三个东西：</strong>
+    </div>
+    <div class="metaphor-cards">
+      <div class="metaphor-card">
+        <div class="mc-icon">📜</div>
+        <div class="mc-label">HTML = 剧本</div>
+        <div class="mc-desc">搭结构，决定页面里有什么</div>
+      </div>
+      <div class="metaphor-card">
+        <div class="mc-icon">💄</div>
+        <div class="mc-label">CSS = 化妆师</div>
+        <div class="mc-desc">让画面好看，管颜色、字体、布局</div>
+      </div>
+      <div class="metaphor-card">
+        <div class="mc-icon">🎬</div>
+        <div class="mc-label">JS = 导演</div>
+        <div class="mc-desc">让画面活起来，管交互和动画</div>
+      </div>
+    </div>
+    <div class="tip-box" contenteditable="true" data-key="s4-tip"></div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s4-script">
+        飞象老师帮你做出来的文件，其实就是三样东西。<br>
+        HTML是剧本，决定页面里有什么；CSS是化妆师，让它好看；JS是导演，让它动起来。<br>
+        你不用记这些，知道就行。
+      </div>
+    </details>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 飞象老师操作截图 1<br><small>点击插入演示截图</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 飞象老师操作截图 2<br><small>生成结果的截图</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(3)">← 上一步</button>
+      <button onclick="goSlide(5)">下一步：项目完善 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 5: 演示-项目完善 -->
+  <div class="slide" data-slide="5">
+    <h2>🎬 演示 · 项目完善</h2>
+    <div class="desc" contenteditable="true" data-key="s5-desc">
+      <ol class="step-list">
+        <li>把飞象的设计交给 Cursor</li>
+        <li>Cursor 自动生成完整项目（你不用看懂！）</li>
+        <li>简单检查，准备运行</li>
+      </ol>
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s5-script">
+        你不需要理解代码在写什么。你只需要知道——<strong>AI在帮你写。</strong>
+      </div>
+    </details>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 Cursor 操作截图 1<br><small>点击插入</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 Cursor 操作截图 2<br><small>代码生成结果截图</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(4)">← 上一步</button>
+      <button onclick="goSlide(6)">下一步：调试 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 6: 演示-调试 -->
+  <div class="slide" data-slide="6">
+    <h2>🎬 演示 · 调试</h2>
+    <div class="desc" contenteditable="true" data-key="s6-desc">
+      <ol class="step-list">
+        <li>打开 Android Studio，导入项目</li>
+        <li>启动模拟器</li>
+        <li>看到APP在模拟器上跑起来！🎉</li>
+      </ol>
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s6-script">
+        看到了吗？从一个想法到一个能跑的APP，就是这么几步。<br>
+        <strong>接下来轮到你们了！</strong>
+      </div>
+    </details>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 Android Studio 操作截图<br><small>导入项目 / 启动模拟器</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="img-placeholder" style="min-height:300px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 模拟器运行截图<br><small>APP跑起来的样子</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(5)">← 上一步</button>
+      <button onclick="goSlide(7)">进入动手环节 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 7: 动手 -->
+  <div class="slide" data-slide="7">
+    <h2>🔨 动手时间</h2>
+    <div class="desc" contenteditable="true" data-key="s7-desc">
+      现在轮到你们了！跟着刚才的演示，一步一步来。<br><br>
+      <strong>做完是惊喜，做不完是正常。</strong><br>
+      重要的是你<strong>开始了</strong>。<br><br>
+      遇到问题随时在群里说，我会来帮你 😊
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s7-script"></div>
+    </details>
+    <div class="img-placeholder" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 插入动手环节的截图或素材</div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(6)">← 上一步</button>
+      <button onclick="goSlide(8)">演示打包 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 8: 演示-打包 -->
+  <div class="slide" data-slide="8">
+    <h2>🎬 演示 · 打包成安装包</h2>
+    <span class="time-badge">21:40 - 21:45</span>
+    <div class="desc" contenteditable="true" data-key="s8-desc">
+      把做好的APP打包成安装包（APK），发给朋友装到手机上！
+      <ol class="step-list" style="margin-top:16px;">
+        <li>在 Android Studio 中选择 Build → Generate APK</li>
+        <li>等待打包完成</li>
+        <li>找到生成的 APK 文件，发给朋友安装</li>
+      </ol>
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s8-script">
+        大家辛苦了！现在快速演示一下怎么打包。<br>
+        打包这一步回去慢慢搞也来得及，<strong>不用着急</strong>。<br>
+        现在最重要的是——让我们来看看大家今天的成果！
+      </div>
+    </details>
+    <div class="img-placeholder" style="min-height:250px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 打包操作截图<br><small>Build → Generate APK 的过程</small></div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="img-placeholder" style="min-height:200px" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 APK 生成成功截图</div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(7)">← 上一步</button>
+      <button onclick="goSlide(9)">进入分享 →</button>
+    </div>
+  </div>
+
+  <!-- Slide 9: 分享 -->
+  <div class="slide" data-slide="9">
+    <h2>🎤 分享时间</h2>
+    <span class="time-badge">21:45 - 22:00</span>
+    <div class="desc" contenteditable="true" data-key="s9-desc">
+      不管你做到哪一步，都可以分享：<br><br>
+      · 展示你的成果（成品或半成品）<br>
+      · 一句话说说你的APP是什么<br>
+      · 你遇到了什么卡点？<br>
+      · <strong>你有没有信心回去搞定它？</strong>
+    </div>
+    <details class="script-toggle">
+      <summary></summary>
+      <div class="script-box" contenteditable="true" data-key="s9-script">
+        今天每个人都从两张照片开始，到现在有了自己的APP或者半成品。<br>
+        有人做完了，有人还在路上——但最重要的是，你现在知道了：<br>
+        <strong>你不需要会写代码，你只需要有一个想法。</strong><br><br>
+        伍尔夫说要有一间自己的房间。<br>
+        今天你已经推开了那扇门。<br>
+        回去以后，慢慢把你的房间装修好。<br><br>
+        <strong>期待看到你们的成品！</strong>
+      </div>
+    </details>
+    <div class="img-placeholder" onclick="this.querySelector('input').click()">
+      <div class="placeholder-text">📷 插入结束画面或合影</div>
+      <input type="file" accept="image/*" onchange="previewImg(this)">
+    </div>
+    <div class="slide-nav">
+      <button onclick="goSlide(8)">← 上一步</button>
+      <button disabled>工作坊结束 🎉</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="whiteboard-panel">
+  <div class="wb-header">
+    <h3>📋 想法白板</h3>
+    <div class="wb-toolbar">
+      <div class="color-dot active" style="background:#3a3a3a" data-color="#3a3a3a" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#e17055" data-color="#e17055" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#d63031" data-color="#d63031" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#e84393" data-color="#e84393" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#6c5ce7" data-color="#6c5ce7" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#0984e3" data-color="#0984e3" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#00b894" data-color="#00b894" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#fdcb6e" data-color="#fdcb6e" onclick="setColor(this)"></div>
+      <span style="color:#ddd">|</span>
+      <button class="size-btn active" data-size="1.1rem" onclick="setSize(this)">小</button>
+      <button class="size-btn" data-size="1.5rem" onclick="setSize(this)">中</button>
+      <button class="size-btn" data-size="2rem" onclick="setSize(this)">大</button>
+      <span style="color:#ddd">|</span>
+      <button class="img-btn" onclick="document.getElementById('wbImgInput').click()">📷 插图</button>
+      <input type="file" id="wbImgInput" accept="image/*" style="display:none" onchange="insertWbImg(this)">
+      <button class="clear-btn" onclick="if(confirm('确定清空白板？')){document.getElementById('wbEditor').innerHTML='';localStorage.removeItem('workshop-whiteboard')}">清空</button>
+    </div>
+  </div>
+  <div class="wb-canvas">
+    <div class="wb-editor" id="wbEditor" contenteditable="true" data-key="whiteboard"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+  // === Slide Navigation ===
+  const tabs = document.querySelectorAll('.nav-tab');
+  const slides = document.querySelectorAll('.slide');
+
+  function goSlide(index) {
+    slides.forEach(s => s.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
+    slides[index].classList.add('active');
+    tabs[index].classList.add('active');
+    document.querySelector('.slides-panel').scrollTop = 0;
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      goSlide(parseInt(tab.dataset.index));
+    });
+  });
+
+  // === Image Preview ===
+  function previewImg(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      const placeholder = input.closest('.img-placeholder');
+      reader.onload = function(e) {
+        let img = placeholder.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          placeholder.appendChild(img);
+        }
+        img.src = e.target.result;
+        placeholder.classList.add('has-image');
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // === Whiteboard ===
+  let currentColor = '#3a3a3a';
+  let currentSize = '1.1rem';
+  const editor = document.getElementById('wbEditor');
+
+  function setColor(el) {
+    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+    currentColor = el.dataset.color;
+    document.execCommand('foreColor', false, currentColor);
+    editor.focus();
+  }
+
+  function setSize(el) {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    currentSize = el.dataset.size;
+    document.execCommand('fontSize', false, '7');
+    const fontElements = editor.querySelectorAll('font[size="7"]');
+    fontElements.forEach(f => {
+      f.removeAttribute('size');
+      f.style.fontSize = currentSize;
+    });
+    editor.focus();
+  }
+
+  function insertWbImg(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        editor.focus();
+        document.execCommand('insertImage', false, e.target.result);
+        const imgs = editor.querySelectorAll('img:not([style])');
+        imgs.forEach(img => {
+          img.style.maxWidth = '100%';
+          img.style.borderRadius = '8px';
+          img.style.margin = '8px 0';
+        });
+      };
+      reader.readAsDataURL(input.files[0]);
+      input.value = '';
+    }
+  }
+
+  editor.addEventListener('keydown', function() {
+    document.execCommand('foreColor', false, currentColor);
+  });
+
+  editor.addEventListener('paste', function(e) {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const blob = items[i].getAsFile();
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            document.execCommand('insertImage', false, ev.target.result);
+            const imgs = editor.querySelectorAll('img:not([style])');
+            imgs.forEach(img => {
+              img.style.maxWidth = '100%';
+              img.style.borderRadius = '8px';
+              img.style.margin = '8px 0';
+            });
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    }
+  });
+
+  // === localStorage Auto-Save ===
+  const STORAGE_PREFIX = 'workshop-v2-';
+
+  // === Save helper ===
+  function saveEl(el) {
+    if (el && el.dataset && el.dataset.key) {
+      localStorage.setItem(STORAGE_PREFIX + el.dataset.key, el.innerHTML);
+    }
+  }
+
+  function saveAll() {
+    document.querySelectorAll('[data-key]').forEach(el => saveEl(el));
+  }
+
+  // Save on input
+  document.addEventListener('input', function(e) {
+    const el = e.target.closest('[data-key]');
+    saveEl(el);
+  });
+
+  // Save on blur (covers cases where input event doesn't fire)
+  document.addEventListener('focusout', function(e) {
+    const el = e.target.closest('[data-key]');
+    saveEl(el);
+  });
+
+  // Save everything before page unload
+  window.addEventListener('beforeunload', saveAll);
+
+  // Periodic auto-save every 5 seconds
+  setInterval(saveAll, 5000);
+
+  // Load saved content on page load
+  function loadSaved() {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const saved = localStorage.getItem(STORAGE_PREFIX + el.dataset.key);
+      if (saved !== null) {
+        el.innerHTML = saved;
+      }
+    });
+  }
+
+  // Reset all saved content
+  function resetAll() {
+    if (confirm('确定重置所有内容为默认？你编辑过的文案和白板内容都会恢复原样。')) {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith(STORAGE_PREFIX)) localStorage.removeItem(k);
+      });
+      location.reload();
+    }
+  }
+
+  // Init
+  loadSaved();
+</script>
+
+</body>
+</html>

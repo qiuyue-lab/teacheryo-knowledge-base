@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的造物手记</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: #faf8f5;
+    color: #3a3a3a;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 20px 28px;
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3e2 50%, #fdebd0 100%);
+    border-bottom: 1px solid #f0e6d6;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e17055, #d63031, #e84393);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: #bbb;
+    font-style: italic;
+  }
+  .header .my-name {
+    margin-top: 16px;
+    font-size: 1.1rem;
+    color: #888;
+  }
+  .header .my-name span {
+    outline: none;
+    border-bottom: 2px dashed #e17055;
+    color: #e17055;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.4rem;
+    padding: 0 12px;
+    min-width: 120px;
+    display: inline-block;
+  }
+
+  /* Sticky toolbar */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,248,245,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f0e6d6;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .toolbar .color-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .toolbar .color-dot:hover,
+  .toolbar .color-dot.active {
+    border-color: #3a3a3a;
+    transform: scale(1.15);
+  }
+  .toolbar .sep { color: #ddd; margin: 0 4px; user-select: none; }
+  .toolbar .size-btn {
+    padding: 4px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #666;
+    transition: all 0.2s;
+  }
+  .toolbar .size-btn:hover,
+  .toolbar .size-btn.active {
+    border-color: #e17055;
+    color: #e17055;
+  }
+  .toolbar .action-btn {
+    padding: 4px 14px;
+    border: 1px solid rgba(225,112,85,0.3);
+    background: rgba(225,112,85,0.06);
+    color: #e17055;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .toolbar .action-btn:hover {
+    background: rgba(225,112,85,0.15);
+  }
+
+  /* Sections */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .section {
+    margin: 32px 0;
+  }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #e17055;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    font-size: 0.75rem;
+    background: rgba(225,112,85,0.1);
+    color: #e17055;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: 400;
+  }
+  .prompt {
+    font-size: 0.95rem;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .prompt strong { color: #555; }
+
+  /* Whiteboard areas */
+  .wb {
+    background: #fffdf9;
+    border: 1.5px solid #f0e6d6;
+    border-radius: 12px;
+    padding: 16px 20px;
+    min-height: 100px;
+    outline: none;
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #3a3a3a;
+    transition: border-color 0.2s;
+    margin-bottom: 16px;
+    cursor: text;
+  }
+  .wb:focus { border-color: #e17055; }
+  .wb:empty::before {
+    content: attr(placeholder);
+    color: #ccc;
+    pointer-events: none;
+  }
+  .wb img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 8px 0;
+    display: block;
+    cursor: nwse-resize;
+  }
+  .wb img:hover {
+    outline: 2px solid #e17055;
+    outline-offset: 2px;
+  }
+  .wb img.resizing {
+    outline: 2px solid #e17055;
+  }
+  .wb-sm { min-height: 60px; }
+  .wb-lg { min-height: 180px; }
+  .wb-xl { min-height: 260px; }
+
+  /* Inline fill */
+  .fill {
+    outline: none;
+    border-bottom: 2px dashed #e17055;
+    color: #e17055;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.15rem;
+    padding: 0 8px;
+    min-width: 80px;
+    display: inline-block;
+  }
+
+  /* Image placeholder */
+  .img-slot {
+    width: 100%;
+    min-height: 200px;
+    background: #fefcfa;
+    border: 2px dashed #e0d5c8;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 0.9rem;
+    margin: 12px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+  .img-slot:hover { border-color: #e17055; background: #fff8f3; }
+  .img-slot img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .img-slot input[type="file"] { display: none; }
+  .img-slot .ph { pointer-events: none; z-index: 1; text-align: center; }
+  .img-slot.has-image .ph { display: none; }
+
+  /* Fold / toggle */
+  .fold {
+    border: none;
+    margin: 12px 0;
+  }
+  .fold summary {
+    cursor: pointer;
+    color: #bbb;
+    font-size: 0.9rem;
+    padding: 6px 0;
+    list-style: none;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .fold summary::-webkit-details-marker { display: none; }
+  .fold summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 0.65rem;
+    transition: transform 0.2s;
+  }
+  .fold[open] summary::before { transform: rotate(90deg); }
+  .fold summary:hover { color: #e17055; }
+  .fold-body { padding: 12px 0 0; }
+
+  /* Two-column */
+  .two-col {
+    display: flex;
+    gap: 16px;
+  }
+  .two-col > div { flex: 1; }
+  @media (max-width: 600px) {
+    .two-col { flex-direction: column; }
+  }
+
+  /* Celebrate box */
+  .celebrate {
+    background: linear-gradient(135deg, #fff7ed, #fef3e2);
+    border: 2px solid #fdcb6e;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .celebrate .icon { font-size: 2rem; margin-bottom: 4px; }
+  .celebrate .text { font-size: 1rem; color: #e17055; font-weight: 700; }
+
+  /* Divider */
+  .divider {
+    border: none;
+    height: 1px;
+    background: #f0e6d6;
+    margin: 32px 0;
+  }
+
+  /* Print styles */
+  @media print {
+    .toolbar { display: none !important; }
+    body { background: #fff; }
+    .section { break-inside: avoid; }
+    .wb { border-color: #ddd; }
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 contenteditable="true" data-key="doc-title" style="-webkit-text-fill-color:transparent; background:linear-gradient(135deg,#e17055,#d63031,#e84393); -webkit-background-clip:text; outline:none;">📓 造物手记</h1>
+  <div class="subtitle">「属于我自己的APP」工作坊</div>
+  <div class="my-name">
+    我的名字：<span contenteditable="true" data-key="my-name"></span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="color-dot active" style="background:#3a3a3a" data-color="#3a3a3a" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#e17055" data-color="#e17055" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#d63031" data-color="#d63031" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#e84393" data-color="#e84393" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#6c5ce7" data-color="#6c5ce7" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#0984e3" data-color="#0984e3" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#00b894" data-color="#00b894" onclick="pickColor(this)"></div>
+  <div class="color-dot" style="background:#fdcb6e" data-color="#fdcb6e" onclick="pickColor(this)"></div>
+  <span class="sep">|</span>
+  <button class="size-btn active" data-size="1.15rem" onclick="pickSize(this)">小</button>
+  <button class="size-btn" data-size="1.6rem" onclick="pickSize(this)">中</button>
+  <button class="size-btn" data-size="2.2rem" onclick="pickSize(this)">大</button>
+  <span class="sep">|</span>
+  <button class="action-btn" onclick="window.print()">🖨️ 打印 / 导出PDF</button>
+  <button class="action-btn" onclick="resetAll()">🔄 重置</button>
+</div>
+
+<div class="container">
+
+  <!-- 开篇: 我想做一个怎样的APP -->
+  <div class="section">
+    <div style="background:#fff8f3; border-left:3px solid #e17055; padding:20px 24px; border-radius:0 12px 12px 0; margin-bottom:8px;">
+      <div style="font-size:1.15rem; color:#555; font-family:'Ma Shan Zheng',cursive;">
+        「我想做一个 <span class="fill" contenteditable="true" data-key="s1-app-idea" style="min-width:200px;"></span> 的APP」
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Slide 1: Check in 看见 -->
+  <div class="section">
+    <div class="section-title">👀 Check in：看见 <span class="badge">Slide 1</span></div>
+
+    <div style="font-size:1.1rem; font-weight:700; color:#e17055; margin-bottom:12px;">🎮 热身游戏</div>
+    <div class="two-col">
+      <div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <div class="ph">📷 我的图片 1<br><small>点击插入</small></div>
+          <input type="file" accept="image/*" onchange="previewImg(this)">
+        </div>
+      </div>
+      <div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <div class="ph">📷 我在群里选的图片 2<br><small>点击插入</small></div>
+          <input type="file" accept="image/*" onchange="previewImg(this)">
+        </div>
+        <div style="text-align:right; font-size:0.85rem; color:#bbb; padding-right:4px;">
+          照片提供者：<span class="fill" contenteditable="true" data-key="photo-provider"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt" style="margin-top:16px;">我选的照片让我想到了……</div>
+    <div class="wb wb-sm" contenteditable="true" data-key="s1-think" placeholder="写下你的联想..."></div>
+
+    <details class="fold">
+      <summary>题目二选一（点击展开）</summary>
+      <div class="fold-body">
+        <div class="prompt">选项 A：刚刚我从群里捡了 <span class="fill" contenteditable="true" data-key="s1-who"></span> 贡献的图，因为……</div>
+        <div class="wb wb-sm" contenteditable="true" data-key="s1-optA" placeholder="写下原因..."></div>
+        <div class="prompt">选项 B：刚刚我坚定自己相册里的第 2 张图片，因为……</div>
+        <div class="wb wb-sm" contenteditable="true" data-key="s1-optB" placeholder="写下原因..."></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Slide 2: 碰撞 -->
+  <div class="section">
+    <div class="section-title">💡 碰撞 <span class="badge">Slide 2</span></div>
+
+    <div style="background:#fff8f3; border:1.5px solid #f0e6d6; border-radius:12px; padding:20px 24px; margin-bottom:20px;">
+      <div style="font-size:1.1rem; font-weight:700; color:#e17055; margin-bottom:8px;">🤖 碰撞 1：与AI碰撞</div>
+      <div class="prompt">把你的想法告诉AI，让它帮你想想：打开APP第一眼看到什么？有哪些功能？怎么交互？</div>
+      <div class="wb wb-xl" contenteditable="true" data-key="s2-ai" placeholder="记录你和AI碰撞出的想法..."></div>
+    </div>
+
+    <div style="background:#fff8f3; border:1.5px solid #f0e6d6; border-radius:12px; padding:20px 24px; margin-bottom:20px;">
+      <div style="font-size:1.1rem; font-weight:700; color:#e17055; margin-bottom:8px;">👥 碰撞 2：和大家碰撞</div>
+      <div class="prompt">听听别人的想法，说说你的——有没有让你眼前一亮的？有没有可以借鉴的？</div>
+      <div class="wb wb-xl" contenteditable="true" data-key="s2-peer" placeholder="记录伙伴们的想法和你的启发..."></div>
+    </div>
+
+    <div style="background:#fff8f3; border:2px solid #e17055; border-radius:12px; padding:20px 24px; margin-bottom:20px;">
+      <div style="font-size:1.1rem; font-weight:700; color:#e17055; margin-bottom:8px;">✅ 我最后的方案</div>
+      <div class="prompt">整理你的最终想法。想一想：技术上能实现吗？<br>⚠️ 几个前提：<strong>不接入云端/服务器</strong>，做一个<strong>小型、轻量化</strong>的APP——工作坊时间有限，先把核心做好！</div>
+      <div class="wb wb-xl" contenteditable="true" data-key="s2-final" placeholder="写下你的最终方案..."></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Slide 3: 动手时间 -->
+  <div class="section">
+    <div class="section-title">🔨 动手时间 <span class="badge">Slide 3</span></div>
+
+    <div class="celebrate">
+      <div class="icon">🎉</div>
+      <div class="text">庆祝错误！</div>
+    </div>
+
+    <div class="prompt">理想很美好，现实很骨感。操作过程中，我发现……</div>
+    <div class="wb wb-lg" contenteditable="true" data-key="s3-found" placeholder="记录你踩过的坑、遇到的bug、意想不到的事..."></div>
+
+    <div class="prompt" style="margin-top:20px;"><strong>我决定这样调整……</strong></div>
+    <div class="wb wb-lg" contenteditable="true" data-key="s3-adjust" placeholder="写下你的调整方案..."></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Slide 4: Check out -->
+  <div class="section">
+    <div class="section-title">✨ Check out <span class="badge">Slide 4</span></div>
+    <div>
+      <div style="font-size:1.2rem; font-weight:700; color:#e17055; margin-bottom:10px;">👀 好奇地围观</div>
+      <div class="prompt">请记下每个人的分享，这些想法让你联想到了什么？</div>
+      <div class="wb" style="min-height:360px;" contenteditable="true" data-key="s4-watch" placeholder="记下每个人的分享，这些想法让你联想到了什么？"></div>
+    </div>
+    <div style="margin-top:24px;">
+      <div style="font-size:1.2rem; font-weight:700; color:#e17055; margin-bottom:10px;">📱 放在桌面上</div>
+      <div class="prompt">请记录你的作品和感受。工作坊给你留下怎样的体验？你的灵感如何发生？你的学习如何发生？</div>
+      <div class="wb" style="min-height:360px;" contenteditable="true" data-key="s4-desktop" placeholder="记录你的作品和感受。工作坊给你留下怎样的体验？你的灵感如何发生？你的学习如何发生？"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding:40px 0 20px; color:#ddd; font-size:0.85rem;">
+    —— 我的造物手记 · end ——
+  </div>
+
+</div>
+
+<script>
+  // === Color & Size ===
+  let curColor = '#3a3a3a';
+  let curSize = '1.15rem';
+
+  function pickColor(el) {
+    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+    curColor = el.dataset.color;
+    document.execCommand('foreColor', false, curColor);
+  }
+
+  function pickSize(el) {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    curSize = el.dataset.size;
+    document.execCommand('fontSize', false, '7');
+    const elems = document.querySelectorAll('font[size="7"]');
+    elems.forEach(f => {
+      f.removeAttribute('size');
+      f.style.fontSize = curSize;
+    });
+  }
+
+  // Apply color on typing in wb areas
+  document.addEventListener('keydown', function(e) {
+    if (e.target.closest('.wb') || e.target.closest('.fill')) {
+      document.execCommand('foreColor', false, curColor);
+    }
+  });
+
+  // Paste images into wb areas
+  document.addEventListener('paste', function(e) {
+    const wb = e.target.closest('.wb');
+    if (!wb) return;
+    const items = e.clipboardData && e.clipboardData.items;
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const blob = items[i].getAsFile();
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            document.execCommand('insertImage', false, ev.target.result);
+            wb.querySelectorAll('img:not([style])').forEach(img => {
+              img.style.maxWidth = '100%';
+              img.style.borderRadius = '8px';
+              img.style.margin = '8px 0';
+            });
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    }
+  });
+
+  // === Image upload ===
+  function previewImg(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      const slot = input.closest('.img-slot');
+      reader.onload = function(e) {
+        let img = slot.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          slot.appendChild(img);
+        }
+        img.src = e.target.result;
+        slot.classList.add('has-image');
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // === Image Resize (drag corner to resize) ===
+  let resizeState = null;
+
+  document.addEventListener('mousedown', function(e) {
+    const img = e.target.closest('.wb img');
+    if (!img) return;
+    e.preventDefault();
+    img.classList.add('resizing');
+    resizeState = {
+      img: img,
+      startX: e.clientX,
+      startWidth: img.offsetWidth
+    };
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!resizeState) return;
+    e.preventDefault();
+    const delta = e.clientX - resizeState.startX;
+    const newWidth = Math.max(60, resizeState.startWidth + delta);
+    const maxWidth = resizeState.img.closest('.wb').offsetWidth - 40;
+    resizeState.img.style.width = Math.min(newWidth, maxWidth) + 'px';
+    resizeState.img.style.maxWidth = Math.min(newWidth, maxWidth) + 'px';
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (resizeState) {
+      resizeState.img.classList.remove('resizing');
+      // Save after resize
+      const wb = resizeState.img.closest('[data-key]');
+      if (wb) localStorage.setItem(PREFIX + wb.dataset.key, wb.innerHTML);
+      resizeState = null;
+    }
+  });
+
+  // Touch support for mobile resize
+  document.addEventListener('touchstart', function(e) {
+    const img = e.target.closest('.wb img');
+    if (!img) return;
+    const touch = e.touches[0];
+    img.classList.add('resizing');
+    resizeState = {
+      img: img,
+      startX: touch.clientX,
+      startWidth: img.offsetWidth
+    };
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (!resizeState) return;
+    const touch = e.touches[0];
+    const delta = touch.clientX - resizeState.startX;
+    const newWidth = Math.max(60, resizeState.startWidth + delta);
+    const maxWidth = resizeState.img.closest('.wb').offsetWidth - 40;
+    resizeState.img.style.width = Math.min(newWidth, maxWidth) + 'px';
+    resizeState.img.style.maxWidth = Math.min(newWidth, maxWidth) + 'px';
+  }, { passive: true });
+
+  document.addEventListener('touchend', function() {
+    if (resizeState) {
+      resizeState.img.classList.remove('resizing');
+      const wb = resizeState.img.closest('[data-key]');
+      if (wb) localStorage.setItem(PREFIX + wb.dataset.key, wb.innerHTML);
+      resizeState = null;
+    }
+  });
+
+  // === localStorage Auto-Save ===
+  const PREFIX = 'notebook-v1-';
+
+  document.addEventListener('input', function(e) {
+    const el = e.target.closest('[data-key]');
+    if (el) {
+      localStorage.setItem(PREFIX + el.dataset.key, el.innerHTML);
+    }
+  });
+
+  function loadSaved() {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const saved = localStorage.getItem(PREFIX + el.dataset.key);
+      if (saved !== null) {
+        el.innerHTML = saved;
+      }
+    });
+  }
+
+  function resetAll() {
+    if (confirm('确定重置所有内容？你写过的内容都会清空。')) {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith(PREFIX)) localStorage.removeItem(k);
+      });
+      location.reload();
+    }
+  }
+
+  loadSaved();
+</script>
+
+</body>
+</html>

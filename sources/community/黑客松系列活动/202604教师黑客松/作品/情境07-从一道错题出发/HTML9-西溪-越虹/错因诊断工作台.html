@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>物理错因诊断</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #132033;
+      --muted: #667085;
+      --line: #e7ecf3;
+      --primary: #2563eb;
+      --primary-soft: #eef4ff;
+      --ok: #166534;
+      --ok-soft: #eefbf2;
+      --warn: #b45309;
+      --warn-soft: #fff7ed;
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 26px 16px 56px;
+    }
+
+    .hero {
+      margin-bottom: 16px;
+      padding: 8px 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .card {
+      margin-top: 16px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .section-sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 7px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #9dc0ff;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.75;
+    }
+
+    .segmented {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      background: #f2f5fa;
+      border: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .segmented button {
+      border: none;
+      background: transparent;
+      color: #475467;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    button.action {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    button.action:hover { transform: translateY(-1px); }
+    button.action:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .primary { background: var(--primary); color: #fff; }
+    .secondary { background: #edf2f8; color: #0f172a; }
+    .ghost { background: #fff; color: #334155; border: 1px solid var(--line); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .question-box {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid #dbe5f4;
+      font-size: 15px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .pill.blue { background: var(--primary-soft); color: var(--primary); }
+    .pill.ok { background: var(--ok-soft); color: var(--ok); }
+    .pill.warn { background: var(--warn-soft); color: var(--warn); }
+
+    .status {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .upload-box {
+      border: 1px dashed #cfd8e7;
+      border-radius: 18px;
+      padding: 14px;
+      background: #fbfcff;
+    }
+
+    .upload-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .preview-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .preview-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .preview-card img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #edf2f7;
+    }
+
+    .hidden { display: none !important; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+    }
+
+    .focus-box {
+      border: 1px solid #dbe5ff;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .focus-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .focus-big {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .focus-text {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #334155;
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: #fff;
+      margin-top: 14px;
+    }
+
+    .box:first-child { margin-top: 0; }
+    .box h3 { margin: 0 0 10px; font-size: 16px; }
+    .box p { margin: 0; color: #334155; font-size: 14px; line-height: 1.8; }
+    ul { margin: 0; padding-left: 18px; color: #334155; font-size: 14px; line-height: 1.8; }
+    li + li { margin-top: 4px; }
+
+    .followup-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #f3dfc2;
+      background: #fffaf2;
+      border-radius: 18px;
+    }
+
+    .followup-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--warn);
+      margin-bottom: 8px;
+    }
+
+    details {
+      margin-top: 14px;
+      border: 1px dashed #d7deea;
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: #fbfcfe;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: #475467;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      border-radius: 14px;
+      padding: 14px;
+      background: #0f172a;
+      color: #e5e7eb;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 760px) {
+      .grid-2, .preview-grid, .result-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+      .page { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="tag">选择题 / 主观题 · 图片分析 · 追问诊断</div>
+      <h1>物理错因诊断</h1>
+      <p>可以随机出题，也可以上传题目图片；主观题支持上传学生作答照片。系统会找出学生与标准解法首次分歧的位置，再通过追问逐步收敛，最后给出针对这个学生的判断。</p>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>临时 API 接口</h2>
+      </div>
+      <p class="section-sub">只保留一个临时 API Key 输入。页面会在有图片时自动切换到视觉模型分析。</p>
+      <label for="apiKey">临时 API Key</label>
+      <input id="apiKey" type="password" placeholder="粘贴临时 Key，仅当前浏览器本地保存" />
+      <div class="actions">
+        <button class="action secondary" onclick="saveApiKey()">保存本地</button>
+      </div>
+      <div class="status" id="apiStatus">等待输入 API Key。</div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>题目</h2>
+      </div>
+      <div class="segmented" role="tablist" aria-label="题型选择">
+        <button id="modeBtnObjective" class="active" onclick="setMode('objective')">选择题</button>
+        <button id="modeBtnSubjective" onclick="setMode('subjective')">主观大题</button>
+      </div>
+
+      <div class="actions">
+        <button class="action secondary" onclick="pickRandomQuestion()">随机出题</button>
+        <button class="action ghost" onclick="clearQuestionImage()">清除题图</button>
+      </div>
+
+      <p class="section-sub" id="questionHelper">当前为选择题模式。可以随机出题，也可以上传自己的题目图片。</p>
+
+      <label for="questionImage">上传题目图片（可选）</label>
+      <div class="upload-box">
+        <input id="questionImage" type="file" accept="image/*" onchange="handleImageUpload('question')" />
+        <div class="upload-note">如果上传了题目图片，AI 会同时参考图片内容；你也可以只用随机题目文本来测试。</div>
+      </div>
+
+      <div class="question-box" id="questionBox">点击“随机出题”，系统会给出一道题。</div>
+      <div class="meta-row" id="questionMeta"><span class="pill blue">尚未出题</span></div>
+
+      <div class="preview-grid" id="previewGrid">
+        <div class="preview-card hidden" id="questionPreviewCard">
+          <div class="preview-title">题目图片</div>
+          <img id="questionPreview" alt="题目图片预览" />
+        </div>
+        <div class="preview-card hidden" id="answerPreviewCard">
+          <div class="preview-title">学生作答照片</div>
+          <img id="answerPreview" alt="学生作答照片预览" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>学生作答</h2>
+      </div>
+      <p class="section-sub">选择题可填写选项和理由；主观题可填写答案，也可以直接上传作答照片。</p>
+
+      <div id="objectiveFields">
+        <div class="grid-2">
+          <div>
+            <label for="studentChoice">学生答案</label>
+            <select id="studentChoice">
+              <option value="">请选择</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+          <div>
+            <label for="studentConfidence">学生自评把握</label>
+            <select id="studentConfidence">
+              <option value="">请选择</option>
+              <option value="很确定">很确定</option>
+              <option value="一般">一般</option>
+              <option value="蒙的">蒙的</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="subjectiveFields" class="hidden">
+        <label for="studentSubjectiveAnswer">学生主观作答文字（可选）</label>
+        <textarea id="studentSubjectiveAnswer" placeholder="可以输入学生的大题作答、关键步骤、列式或口述解释。若主要依赖照片，这里可以简写。"></textarea>
+      </div>
+
+      <label for="studentReasoning">学生当前思路 / 理由</label>
+      <textarea id="studentReasoning" placeholder="例如：我觉得合力向右，所以加速度向右；或者：我是先根据受力平衡来判断的。主观题也可以写学生的口头解释。"></textarea>
+
+      <label for="answerImage">上传学生作答照片（可选）</label>
+      <div class="upload-box">
+        <input id="answerImage" type="file" accept="image/*" onchange="handleImageUpload('answer')" />
+        <div class="upload-note">适合主观题纸面作答，也可以上传选择题答题纸。页面会把照片作为图片输入交给视觉模型分析。</div>
+      </div>
+
+      <div class="actions">
+        <button class="action primary" id="analyzeBtn" onclick="analyzeFirstPass()">提交作答并分析</button>
+        <button class="action ghost" onclick="clearStudentInput()">清空作答</button>
+      </div>
+      <div class="status" id="statusText">等待学生作答。</div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>诊断结果</h2>
+      </div>
+      <div class="result-grid">
+        <div class="focus-box">
+          <div class="focus-title">当前判断</div>
+          <div class="focus-big" id="primaryStep">等待分析</div>
+          <div class="focus-text" id="summaryText">系统会先判断学生最早在哪一步与正确解法分歧。</div>
+          <div class="meta-row" id="diagnosisPills"><span class="pill blue">未分析</span></div>
+        </div>
+        <div class="box">
+          <h3>当前最需要问的一句</h3>
+          <p id="bestQuestion">若证据不足，系统会在这里给出下一句追问。</p>
+        </div>
+      </div>
+
+      <div class="followup-box hidden" id="followupSection">
+        <div class="followup-title">继续追问</div>
+        <p id="followupHint" style="margin:0 0 10px;color:#7c2d12;font-size:14px;line-height:1.8;">请把学生对这句追问的回答填在下面，再继续分析。</p>
+        <label for="followupAnswer">学生追问回答</label>
+        <textarea id="followupAnswer" placeholder="把学生的回答写在这里"></textarea>
+        <div class="actions">
+          <button class="action primary" id="continueBtn" onclick="continueDiagnosis()">继续分析</button>
+        </div>
+      </div>
+
+      <div class="box">
+        <h3>首次分歧点</h3>
+        <p id="divergenceText">等待分析结果。</p>
+      </div>
+
+      <div class="box">
+        <h3>判断依据</h3>
+        <ul id="evidenceList"><li>等待分析结果。</li></ul>
+      </div>
+
+      <div class="box">
+        <h3>修复建议</h3>
+        <ul id="repairList"><li>等待分析结果。</li></ul>
+      </div>
+
+      <div class="box">
+        <h3>对这个学生的最终判断</h3>
+        <p id="finalJudgment">当诊断收敛后，系统会在这里给出针对这个学生的判断。</p>
+      </div>
+
+      <details>
+        <summary>查看技术返回</summary>
+        <pre id="rawResponse">尚未调用 API。</pre>
+      </details>
+    </section>
+  </div>
+
+  <script>
+    const ENDPOINT = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+    const TEXT_MODEL = 'qwen-plus';
+    const VISION_MODEL = 'qwen3-vl-plus';
+    const KEY_STORAGE = 'dashscope_temp_api_key_multimodal';
+
+    const OBJECTIVE_BANK = [
+      {
+        id: 1,
+        category: '受力与加速度',
+        level: '基础',
+        stem: '一个物体在水平面上向右运动，受到一个水平向右的拉力和一个水平向左的摩擦力，且拉力大于摩擦力。则物体的加速度方向为\nA. 向左\nB. 向右\nC. 竖直向下\nD. 无法确定',
+        answer: 'B',
+        standard_chain: [
+          '读出两个水平力方向相反，且拉力大于摩擦力',
+          '确定研究对象是这个物体',
+          '判断合力方向向右',
+          '根据牛顿第二定律判断加速度方向与合力方向一致'
+        ],
+        concise_solution: '先看合力方向。因为水平向右的拉力大于水平向左的摩擦力，所以合力向右。加速度方向与合力方向一致，因此选 B。'
+      },
+      {
+        id: 2,
+        category: '平衡条件',
+        level: '基础',
+        stem: '一个物体静止在水平桌面上，下列说法正确的是\nA. 物体没有受到力的作用\nB. 物体受到的重力大于桌面对它的支持力\nC. 物体受到的重力和桌面对它的支持力大小相等\nD. 物体受到的支持力大于重力，因为桌子是坚硬的',
+        answer: 'C',
+        standard_chain: [
+          '读出物体静止在桌面上',
+          '确定研究对象是物体本身',
+          '判断竖直方向受重力和支持力',
+          '由静止可知合力为零，所以支持力大小等于重力'
+        ],
+        concise_solution: '物体静止，说明受力平衡。竖直方向上重力向下，支持力向上，二者大小相等，因此选 C。'
+      },
+      {
+        id: 3,
+        category: '平抛运动',
+        level: '中等',
+        stem: '一个小球被水平抛出，不计空气阻力，则小球在空中运动时\nA. 水平方向做匀速运动，竖直方向做自由落体运动\nB. 水平方向做减速运动，竖直方向做匀速运动\nC. 水平方向和竖直方向都做匀速运动\nD. 水平方向和竖直方向都做匀加速运动，且加速度相同',
+        answer: 'A',
+        standard_chain: [
+          '识别题目情境是平抛运动',
+          '将运动分解为水平方向和竖直方向',
+          '判断水平方向不受力所以匀速，竖直方向仅受重力所以自由落体',
+          '综合得到选项 A'
+        ],
+        concise_solution: '平抛运动要分解看。水平方向不受力，做匀速运动；竖直方向只受重力，做自由落体运动，因此选 A。'
+      },
+      {
+        id: 4,
+        category: '洛伦兹力',
+        level: '中等',
+        stem: '一个带正电的粒子垂直进入匀强磁场中，只受洛伦兹力作用，则粒子的速度大小将\nA. 变大\nB. 变小\nC. 不变\nD. 先变大后变小',
+        answer: 'C',
+        standard_chain: [
+          '读出粒子只受洛伦兹力作用',
+          '明确洛伦兹力始终与速度方向垂直',
+          '判断洛伦兹力不做功',
+          '得出速度大小不变'
+        ],
+        concise_solution: '洛伦兹力总与速度垂直，不做功，所以只能改变速度方向，不能改变速度大小，因此选 C。'
+      }
+    ];
+
+    const SUBJECTIVE_BANK = [
+      {
+        id: 101,
+        category: '牛顿第二定律',
+        level: '基础',
+        stem: '质量为 2 kg 的物体放在粗糙水平面上，受到 10 N 水平向右的拉力作用，已知滑动摩擦力大小为 4 N，求物体的加速度大小。',
+        answer: '3 m/s²',
+        standard_chain: [
+          '确定研究对象为物体',
+          '分析水平向右拉力和水平向左摩擦力',
+          '先求合力 F合 = 10 - 4 = 6 N',
+          '再由牛顿第二定律 a = F合/m = 6/2 = 3 m/s²'
+        ],
+        concise_solution: '物体受水平向右拉力 10 N 和水平向左摩擦力 4 N，所以合力为 6 N。由牛顿第二定律 a=F/m=6/2=3 m/s²。'
+      },
+      {
+        id: 102,
+        category: '平抛运动',
+        level: '中等',
+        stem: '一个小球从高 20 m 处以 10 m/s 的速度水平抛出，不计空气阻力，取 g=10 m/s²，求小球落地时间和水平位移。',
+        answer: 't=2 s，x=20 m',
+        standard_chain: [
+          '建立平抛图景，分解为水平方向和竖直方向',
+          '先在竖直方向用 h = 1/2gt² 求时间',
+          '算得 t = 2 s',
+          '再在水平方向用 x = v0t 求位移，得 x = 20 m'
+        ],
+        concise_solution: '竖直方向有 20=1/2×10×t²，得 t=2 s；水平方向位移 x=10×2=20 m。'
+      },
+      {
+        id: 103,
+        category: '电磁感应',
+        level: '中等',
+        stem: '一根导体棒在匀强磁场中切割磁感线运动，闭合回路中产生感应电流。请说明感应电流产生的条件，并解释本题中为什么会有感应电流。',
+        answer: '闭合回路中磁通量发生变化，因此产生感应电流',
+        standard_chain: [
+          '回忆感应电流产生的一般条件',
+          '明确必须是闭合回路且磁通量发生变化',
+          '把本题中的导体棒切割磁感线与磁通量变化联系起来',
+          '得出回路中产生感应电流'
+        ],
+        concise_solution: '感应电流产生的条件是闭合回路中的磁通量发生变化。本题中导体棒运动导致回路面积或穿过回路的磁通量变化，因此有感应电流。'
+      }
+    ];
+
+    let mode = 'objective';
+    let currentQuestion = null;
+    let dialogueHistory = [];
+    let questionImageDataUrl = '';
+    let answerImageDataUrl = '';
+
+    const SYSTEM_PROMPT = `你是“高中物理错因追问诊断引擎”。
+
+你的任务流程必须严格遵循：
+1. 先根据题目与标准解法，写出标准推理链。
+2. 再根据学生答案、学生解释、学生作答照片、题目图片，重建学生当前推理链。
+3. 找出学生第一次偏离标准推理链的位置，这个位置就是“首次分歧点”。
+4. 判断该分歧更偏向：知识问题 / 能力问题 / 提取失败。
+5. 如果证据还不够，请只提出一个最有鉴别度的追问。
+6. 如果证据已经足够，请收敛成最终判断，并写出对这个学生在该问题上的判断。
+7. 如果上传了图片，必须认真阅读图片中的题干、选项、公式、步骤和涂改痕迹，再与文字输入综合判断。
+
+你的输出必须是 json，不要出现 markdown 代码块。
+输出格式严格如下：
+{
+  "stage": "needs_followup|final",
+  "question_mode": "objective|subjective",
+  "correct_answer": "若是选择题填 A|B|C|D；若是主观题可填参考答案摘要",
+  "standard_chain": ["..."],
+  "student_chain": ["..."],
+  "first_divergence": {
+    "step": "...",
+    "summary": "..."
+  },
+  "diagnosis": {
+    "primary_step": "...",
+    "primary_type": "知识问题|能力问题|提取失败",
+    "summary": "..."
+  },
+  "best_probe_question": "...",
+  "evidence": ["..."],
+  "repair_actions": ["..."],
+  "final_student_judgment": "如果尚未收敛，可写当前倾向；如果已收敛，要给出对这个学生在该问题上的判断。",
+  "confidence": "低|中|高"
+}`;
+
+    function saveApiKey() {
+      const key = document.getElementById('apiKey').value.trim();
+      if (!key) {
+        alert('请先输入临时 API Key');
+        return;
+      }
+      localStorage.setItem(KEY_STORAGE, key);
+      document.getElementById('apiStatus').textContent = '已保存到当前浏览器本地。';
+    }
+
+    function loadApiKey() {
+      const key = localStorage.getItem(KEY_STORAGE) || '';
+      if (key) {
+        document.getElementById('apiKey').value = key;
+        document.getElementById('apiStatus').textContent = '已读取本地临时 API Key。';
+      }
+    }
+
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      document.getElementById('modeBtnObjective').classList.toggle('active', mode === 'objective');
+      document.getElementById('modeBtnSubjective').classList.toggle('active', mode === 'subjective');
+      document.getElementById('objectiveFields').classList.toggle('hidden', mode !== 'objective');
+      document.getElementById('subjectiveFields').classList.toggle('hidden', mode !== 'subjective');
+      document.getElementById('questionHelper').textContent = mode === 'objective'
+        ? '当前为选择题模式。可以随机出题，也可以上传自己的题目图片。'
+        : '当前为主观大题模式。可以随机出题，也可以上传自己的题目图片；主观题支持上传学生作答照片。';
+      pickRandomQuestion();
+    }
+
+    function pickRandomQuestion() {
+      const bank = mode === 'objective' ? OBJECTIVE_BANK : SUBJECTIVE_BANK;
+      currentQuestion = JSON.parse(JSON.stringify(randomItem(bank)));
+      dialogueHistory = [];
+      renderQuestion();
+      clearStudentInput(false);
+      resetDiagnosis();
+      setStatus('已生成题目，请学生开始作答。');
+    }
+
+    function renderQuestion() {
+      const box = document.getElementById('questionBox');
+      const meta = document.getElementById('questionMeta');
+      if (!currentQuestion) {
+        box.textContent = '点击“随机出题”，系统会给出一道题。';
+        meta.innerHTML = '<span class="pill blue">尚未出题</span>';
+        return;
+      }
+      box.textContent = currentQuestion.stem;
+      meta.innerHTML = `
+        <span class="pill blue">${escapeHtml(mode === 'objective' ? '选择题' : '主观题')}</span>
+        <span class="pill blue">${escapeHtml(currentQuestion.category)}</span>
+        <span class="pill ok">${escapeHtml(currentQuestion.level)}</span>
+      `;
+    }
+
+    function clearStudentInput(resetStatus = true) {
+      document.getElementById('studentChoice').value = '';
+      document.getElementById('studentConfidence').value = '';
+      document.getElementById('studentSubjectiveAnswer').value = '';
+      document.getElementById('studentReasoning').value = '';
+      document.getElementById('followupAnswer').value = '';
+      document.getElementById('answerImage').value = '';
+      answerImageDataUrl = '';
+      document.getElementById('answerPreviewCard').classList.add('hidden');
+      document.getElementById('answerPreview').removeAttribute('src');
+      if (resetStatus) setStatus('已清空学生作答。');
+    }
+
+    function clearQuestionImage() {
+      document.getElementById('questionImage').value = '';
+      questionImageDataUrl = '';
+      document.getElementById('questionPreviewCard').classList.add('hidden');
+      document.getElementById('questionPreview').removeAttribute('src');
+      setStatus('已清除题目图片。');
+    }
+
+    function resetDiagnosis() {
+      document.getElementById('primaryStep').textContent = '等待分析';
+      document.getElementById('summaryText').textContent = '系统会先判断学生最早在哪一步与正确解法分歧。';
+      document.getElementById('bestQuestion').textContent = '若证据不足，系统会在这里给出下一句追问。';
+      document.getElementById('divergenceText').textContent = '等待分析结果。';
+      document.getElementById('finalJudgment').textContent = '当诊断收敛后，系统会在这里给出针对这个学生的判断。';
+      document.getElementById('diagnosisPills').innerHTML = '<span class="pill blue">未分析</span>';
+      renderList('evidenceList', [], '等待分析结果。');
+      renderList('repairList', [], '等待分析结果。');
+      document.getElementById('rawResponse').textContent = '尚未调用 API。';
+      document.getElementById('followupSection').classList.add('hidden');
+      document.getElementById('followupAnswer').value = '';
+    }
+
+    function setStatus(text) {
+      document.getElementById('statusText').textContent = text;
+    }
+
+    function renderList(id, items, emptyText) {
+      const el = document.getElementById(id);
+      if (!Array.isArray(items) || items.length === 0) {
+        el.innerHTML = `<li>${escapeHtml(emptyText)}</li>`;
+        return;
+      }
+      el.innerHTML = items.map(item => `<li>${escapeHtml(typeof item === 'string' ? item : JSON.stringify(item))}</li>`).join('');
+    }
+
+    function renderPills(type, confidence, stage) {
+      const typeClass = type === '知识问题' ? 'blue' : type === '能力问题' ? 'warn' : 'ok';
+      const confClass = confidence === '高' ? 'ok' : confidence === '中' ? 'warn' : 'blue';
+      const stageText = stage === 'final' ? '已收敛' : '继续追问';
+      document.getElementById('diagnosisPills').innerHTML = `
+        <span class="pill ${typeClass}">${escapeHtml(type || '未识别')}</span>
+        <span class="pill ${confClass}">置信度：${escapeHtml(confidence || '低')}</span>
+        <span class="pill blue">${stageText}</span>
+      `;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function safeText(v, fallback = '—') {
+      return (v === undefined || v === null || v === '') ? fallback : v;
+    }
+
+    function tryParseJSON(text) {
+      if (!text) return null;
+      const cleaned = text.trim().replace(/^```json\s*/i, '').replace(/^```/, '').replace(/```$/, '').trim();
+      try {
+        return JSON.parse(cleaned);
+      } catch {
+        const start = cleaned.indexOf('{');
+        const end = cleaned.lastIndexOf('}');
+        if (start !== -1 && end !== -1 && end > start) {
+          try {
+            return JSON.parse(cleaned.slice(start, end + 1));
+          } catch {
+            return null;
+          }
+        }
+        return null;
+      }
+    }
+
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleImageUpload(kind) {
+      const input = kind === 'question' ? document.getElementById('questionImage') : document.getElementById('answerImage');
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        const dataUrl = await fileToDataURL(file);
+        if (kind === 'question') {
+          questionImageDataUrl = dataUrl;
+          document.getElementById('questionPreview').src = dataUrl;
+          document.getElementById('questionPreviewCard').classList.remove('hidden');
+          setStatus('已载入题目图片。');
+        } else {
+          answerImageDataUrl = dataUrl;
+          document.getElementById('answerPreview').src = dataUrl;
+          document.getElementById('answerPreviewCard').classList.remove('hidden');
+          setStatus('已载入学生作答照片。');
+        }
+      } catch (e) {
+        alert('图片读取失败，请重试。');
+      }
+    }
+
+    function buildTextPrompt() {
+      const studentChoice = document.getElementById('studentChoice').value.trim();
+      const studentConfidence = document.getElementById('studentConfidence').value.trim();
+      const studentReasoning = document.getElementById('studentReasoning').value.trim();
+      const studentSubjectiveAnswer = document.getElementById('studentSubjectiveAnswer').value.trim();
+      const followupAnswer = document.getElementById('followupAnswer').value.trim();
+      const historyText = dialogueHistory.length
+        ? dialogueHistory.map((item, idx) => `第${idx + 1}轮追问：${item.question}\n学生回答：${item.answer}`).join('\n\n')
+        : '暂无';
+
+      return `【题型】\n${mode === 'objective' ? '选择题' : '主观题'}\n\n【题目文字】\n${currentQuestion ? currentQuestion.stem : '未提供随机题目文本'}\n\n【标准答案】\n${currentQuestion ? currentQuestion.answer : '未提供'}\n\n【标准推理链参考】\n${currentQuestion ? currentQuestion.standard_chain.join('；') : '未提供'}\n\n【标准简解】\n${currentQuestion ? currentQuestion.concise_solution : '未提供'}\n\n【学生选择题答案】\n${studentChoice || '未填写'}\n\n【学生自评把握】\n${studentConfidence || '未填写'}\n\n【学生主观作答文字】\n${studentSubjectiveAnswer || '未填写'}\n\n【学生当前解释】\n${studentReasoning || '未填写'}\n\n【历史追问记录】\n${historyText}\n\n【本轮新增追问回答】\n${followupAnswer || '无'}\n\n【图片说明】\n${questionImageDataUrl ? '已上传题目图片，请结合图片中的题干、选项、公式和图示一起分析。' : '未上传题目图片。'}\n${answerImageDataUrl ? '已上传学生作答照片，请结合图片中的字迹、列式、涂改和图示一起分析。' : '未上传学生作答照片。'}\n\n请先判断是否已经足够收敛：\n- 如果还不够，就输出 stage=needs_followup，并给出一条高鉴别度追问。\n- 如果已经够了，就输出 stage=final，并给出最终判断。`;
+    }
+
+    function buildMessages() {
+      const textPrompt = buildTextPrompt();
+      const hasImages = Boolean(questionImageDataUrl || answerImageDataUrl);
+      if (!hasImages) {
+        return [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: textPrompt }
+        ];
+      }
+
+      const content = [{ type: 'text', text: textPrompt }];
+      if (questionImageDataUrl) {
+        content.push({ type: 'image_url', image_url: { url: questionImageDataUrl } });
+      }
+      if (answerImageDataUrl) {
+        content.push({ type: 'image_url', image_url: { url: answerImageDataUrl } });
+      }
+      return [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content }
+      ];
+    }
+
+    async function callModel() {
+      const key = document.getElementById('apiKey').value.trim();
+      if (!key) {
+        alert('请先输入临时 API Key');
+        return null;
+      }
+
+      const useVision = Boolean(questionImageDataUrl || answerImageDataUrl);
+      const payload = {
+        model: useVision ? VISION_MODEL : TEXT_MODEL,
+        messages: buildMessages(),
+        temperature: 0.2,
+        stream: false,
+        response_format: { type: 'json_object' }
+      };
+
+      const response = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+        throw new Error(json?.error?.message || `HTTP ${response.status}`);
+      }
+      const rawText = json?.choices?.[0]?.message?.content || JSON.stringify(json, null, 2);
+      return { rawText, parsed: tryParseJSON(rawText) };
+    }
+
+    function renderDiagnosis(obj, rawText) {
+      document.getElementById('rawResponse').textContent = rawText || '无返回。';
+      if (!obj || !obj.diagnosis) {
+        document.getElementById('primaryStep').textContent = '未能解析结果';
+        document.getElementById('summaryText').textContent = '模型返回了内容，但不是预期 JSON。';
+        document.getElementById('bestQuestion').textContent = '请展开下方技术返回查看。';
+        document.getElementById('divergenceText').textContent = '未能识别首次分歧点。';
+        document.getElementById('finalJudgment').textContent = '暂未生成。';
+        renderPills('未识别', '低', 'needs_followup');
+        renderList('evidenceList', [], '请查看技术返回。');
+        renderList('repairList', [], '请查看技术返回。');
+        document.getElementById('followupSection').classList.add('hidden');
+        return;
+      }
+
+      const diagnosis = obj.diagnosis || {};
+      const firstD = obj.first_divergence || {};
+      const stage = obj.stage || 'needs_followup';
+      document.getElementById('primaryStep').textContent = `${safeText(diagnosis.primary_step)} · ${safeText(diagnosis.primary_type)}`;
+      document.getElementById('summaryText').textContent = safeText(diagnosis.summary);
+      document.getElementById('bestQuestion').textContent = stage === 'final'
+        ? '当前已经收敛，不需要继续追问。'
+        : safeText(obj.best_probe_question, '请继续补充学生想法。');
+      document.getElementById('divergenceText').textContent = `${safeText(firstD.step)}：${safeText(firstD.summary)}`;
+      document.getElementById('finalJudgment').textContent = safeText(obj.final_student_judgment, '暂未生成。');
+      renderPills(diagnosis.primary_type, obj.confidence, stage);
+      renderList('evidenceList', obj.evidence, '暂无判断依据。');
+      renderList('repairList', obj.repair_actions, '暂无修复建议。');
+      document.getElementById('followupSection').classList.toggle('hidden', stage === 'final');
+    }
+
+    async function analyzeFirstPass() {
+      if (!currentQuestion && !questionImageDataUrl) {
+        alert('请先随机出题，或者上传题目图片。');
+        return;
+      }
+
+      const studentReasoning = document.getElementById('studentReasoning').value.trim();
+      if (mode === 'objective') {
+        const studentChoice = document.getElementById('studentChoice').value.trim();
+        if (!studentChoice && !answerImageDataUrl) {
+          alert('选择题请至少填写学生选项，或者上传学生作答照片。');
+          return;
+        }
+      } else {
+        const subjective = document.getElementById('studentSubjectiveAnswer').value.trim();
+        if (!subjective && !answerImageDataUrl && !studentReasoning) {
+          alert('主观题请至少填写文字作答、思路说明，或上传作答照片。');
+          return;
+        }
+      }
+
+      if (!studentReasoning && !answerImageDataUrl && mode === 'objective') {
+        alert('建议至少补一句“学生为什么这么做”，这样更容易定位断点。');
+      }
+
+      dialogueHistory = [];
+      document.getElementById('followupAnswer').value = '';
+      await runDiagnosis('正在分析学生首次分歧点...');
+    }
+
+    async function continueDiagnosis() {
+      const answer = document.getElementById('followupAnswer').value.trim();
+      if (!answer) {
+        alert('请先填写学生对追问的回答。');
+        return;
+      }
+      const question = document.getElementById('bestQuestion').textContent.trim();
+      dialogueHistory.push({ question, answer });
+      document.getElementById('followupAnswer').value = '';
+      await runDiagnosis('正在根据追问继续收敛诊断...');
+    }
+
+    async function runDiagnosis(loadingText) {
+      const btn1 = document.getElementById('analyzeBtn');
+      const btn2 = document.getElementById('continueBtn');
+      btn1.disabled = true;
+      if (btn2) btn2.disabled = true;
+      setStatus(loadingText);
+      document.getElementById('rawResponse').textContent = '分析中...';
+      try {
+        localStorage.setItem(KEY_STORAGE, document.getElementById('apiKey').value.trim());
+        const result = await callModel();
+        renderDiagnosis(result?.parsed, result?.rawText);
+        setStatus('分析完成。');
+      } catch (error) {
+        document.getElementById('rawResponse').textContent = error.message || '调用失败';
+        document.getElementById('primaryStep').textContent = '调用失败';
+        document.getElementById('summaryText').textContent = '当前没有拿到有效结果。若浏览器直连受限，可改为本地后端转发。';
+        document.getElementById('bestQuestion').textContent = '暂时无法生成。';
+        document.getElementById('divergenceText').textContent = '调用失败。';
+        document.getElementById('finalJudgment').textContent = '调用失败。';
+        renderPills('未识别', '低', 'needs_followup');
+        renderList('evidenceList', [], '调用失败。');
+        renderList('repairList', [], '调用失败。');
+        document.getElementById('followupSection').classList.add('hidden');
+        setStatus('调用失败：' + (error.message || '未知错误'));
+      } finally {
+        btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+      }
+    }
+
+    loadApiKey();
+    setMode('objective');
+  </script>
+</body>
+</html>
