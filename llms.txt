@@ -2,12 +2,12 @@
 
 > YoYo 关于 AI × 教育的个人知识库。基于公众号文章、书稿、社群分享、播客访谈沉淀，持续更新。
 
-## 核心知识（待分析生成）
+## 核心知识
 
-- [AI×教育 总体框架](docs/ai-education-overview.md): YoYo 对 AI 如何改变教育的完整理解，先读这个
-- [核心教学理念](docs/teaching-philosophy.md): 从所有文章中提炼的教学信念和方法论
-- [常用观点与金句](docs/viewpoints-and-quotes.md): 高频引用的观点、金句、类比
-- [高数据文章数据采集](docs/data-insights.md): 传播效果好的文章及其数据表现
+- [AI×教育 总体框架](docs/ai-education-overview.md): YoYo 对 AI 如何改变教育的完整理解——核心立场、三层应用、教师转型路径、对教育生态的深层判断。先读这个
+- [核心教学理念](docs/teaching-philosophy.md): 15 条核心教学信念，按出现频率排序，每条含原文金句和出处
+- [常用观点与金句](docs/viewpoints-and-quotes.md): 23 条高频引用的观点和金句，按主题分类
+- [高数据文章与传播洞察](docs/data-insights.md): 高传播力主题方向、社群趋势、方法论框架索引（11 个核心框架）
 
 ## 素材来源
 
