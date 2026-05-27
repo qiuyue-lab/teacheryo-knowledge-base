@@ -13,7 +13,8 @@ YoYo 的 AI × 教育 个人知识库。采用 LLM Wiki 结构，面向 AI 角�
 | [AI×教育 总体框架](docs/ai-education-overview.md) | 核心立场、三层应用、教师转型路径、对教育生态的深层判断 |
 | [核心教学理念](docs/teaching-philosophy.md) | 15 条核心教学信念，按出现频率排序 |
 | [常用观点与金句](docs/viewpoints-and-quotes.md) | 23 条高频引用的观点和金句 |
-| [高数据文章与传播洞察](docs/data-insights.md) | 高传播力主题方向、社群趋势、11 个方法论框架索引 |
+| [高数据文章与传播洞察](docs/data-insights.md) | 高传播力主题方向、社群趋势、9 个原创方法论框架索引 |
+| [公众号写作偏好](docs/writing-style.md) | YoYo 的文章气质、结构偏好、标题开头结尾习惯，用于公众号写作和改稿 |
 
 ### 素材来源
 

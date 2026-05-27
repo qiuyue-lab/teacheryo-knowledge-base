@@ -7,7 +7,8 @@
 - [AI×教育 总体框架](docs/ai-education-overview.md): YoYo 对 AI 如何改变教育的完整理解——核心立场、三层应用、教师转型路径、对教育生态的深层判断。先读这个
 - [核心教学理念](docs/teaching-philosophy.md): 15 条核心教学信念，按出现频率排序，每条含原文金句和出处
 - [常用观点与金句](docs/viewpoints-and-quotes.md): 23 条高频引用的观点和金句，按主题分类
-- [高数据文章与传播洞察](docs/data-insights.md): 高传播力主题方向、社群趋势、方法论框架索引（11 个核心框架）
+- [高数据文章与传播洞察](docs/data-insights.md): 高传播力主题方向、社群趋势、方法论框架索引（9 个原创核心框架）
+- [公众号写作偏好](docs/writing-style.md): YoYo 的文章气质、结构偏好、标题开头结尾习惯。写公众号、改稿、拟标题、判断文章是否像 YoYo 时先读这个
 
 ## 素材来源
 
@@ -48,6 +49,7 @@
 - 需要最系统的思考 → 读 sources/book/ 下的书稿
 - 需要引用观点或金句 → 查 docs/viewpoints-and-quotes.md
 - 需要数据支撑 → 查 docs/data-insights.md
+- 需要写公众号、改公众号、生成标题或判断文章是否像 YoYo → 查 docs/writing-style.md
 - 需要某篇具体文章 → 到 sources/articles/ 按日期查找
 - 需要社群实践案例 → 查 sources/community/
 - 需要播客对话内容 → 查 sources/podcast/
