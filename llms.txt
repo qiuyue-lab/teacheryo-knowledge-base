@@ -1,25 +1,53 @@
 # TeacherYo Knowledge Base
 
-> YoYo 关于 AI × 教育的个人知识库。基于公众号文章沉淀，持续更新。
+> YoYo 关于 AI × 教育的个人知识库。基于公众号文章、书稿、社群分享、播客访谈沉淀，持续更新。
 
-## 核心知识
+## 核心知识（待分析生成）
 
 - [AI×教育 总体框架](docs/ai-education-overview.md): YoYo 对 AI 如何改变教育的完整理解，先读这个
 - [核心教学理念](docs/teaching-philosophy.md): 从所有文章中提炼的教学信念和方法论
 - [常用观点与金句](docs/viewpoints-and-quotes.md): 高频引用的观点、金句、类比
 - [高数据文章数据采集](docs/data-insights.md): 传播效果好的文章及其数据表现
 
-## 主题文档
+## 素材来源
 
-（随文章解析后自然涌现，持续补充）
+### Book — AI 备课书稿（最系统的思考）
 
-## 原文存档
+- [目录](sources/book/目录.md): 全书结构总览
+- [前言](sources/book/前言.md): 写作初衷与核心主张
+- [第一部分：认识AI备课与快速入门](sources/book/第一部分_认识AI备课与快速入门.md)
+- [第二部分：把AI用到你的课上](sources/book/第二部分_把AI用到你的课上.md)
+- [第三部分：建立个人系统](sources/book/第三部分_建立个人系统.md)
+- [第四部分：回到本质](sources/book/第四部分_回到本质.md)
 
-- articles/ 目录下按 "日期-标题.md" 存放所有公众号文章的结构化解析
+### 公众号文章 — 113 篇观点输出（2025-2026）
+
+- sources/articles/ 目录下按文件名排列，文件名含日期和主题
+- 覆盖主题：AI备课、AI教研、作业设计、应试教育重构、教师学习路径、AI分身、知识库、课程设计等
+
+### 社群分享 — 实践案例与社区生态
+
+- sources/community/ 目录下按分享日期和主题组织
+- 包含：止水老师、炎鑫老师、少川老师、云天老师、希希工作坊、黑客松系列等
+- 每个分享通常包含转写稿和内容总结
+
+### 小宇宙播客 — 访谈与深层对话
+
+- sources/podcast/ 目录下按嘉宾和日期组织
+- 包含：炎鑫（命题/备考）、正己老师、云天老师、河狸、凤棋CES、希希、李文华老师等
+- 每期通常包含访谈大纲、转写稿、show notes
+
+### 方法论 — 课程学习范式
+
+- sources/methodology/ 目录下
+- 包含：学习系统设计原则、课程平台形态探讨、HTML交互式课程模板规范等
 
 ## 使用说明
 
-- 需要了解 YoYo 的教育理念 → 先读 ai-education-overview.md
-- 需要引用观点或金句 → 查 viewpoints-and-quotes.md
-- 需要数据支撑 → 查 data-insights.md
-- 需要某篇具体文章 → 到 articles/ 按日期查找
+- 需要了解 YoYo 的教育理念 → 先读 docs/ai-education-overview.md
+- 需要最系统的思考 → 读 sources/book/ 下的书稿
+- 需要引用观点或金句 → 查 docs/viewpoints-and-quotes.md
+- 需要数据支撑 → 查 docs/data-insights.md
+- 需要某篇具体文章 → 到 sources/articles/ 按日期查找
+- 需要社群实践案例 → 查 sources/community/
+- 需要播客对话内容 → 查 sources/podcast/
