@@ -10,6 +10,10 @@
 - [高数据文章与传播洞察](docs/data-insights.md): 高传播力主题方向、社群趋势、方法论框架索引（9 个原创核心框架）
 - [公众号写作偏好](docs/writing-style.md): YoYo 的文章气质、结构偏好、标题开头结尾习惯。写公众号、改稿、拟标题、判断文章是否像 YoYo 时先读这个
 
+## Agent Skills
+
+- [YoYo 小人正文配图](skills/yoyo-illustrations/SKILL.md): 为中文文章生成 YoYo IP 白底手绘怪诞正文配图。需要正文插图、shot list、公众号配图时读取此 skill
+
 ## 素材来源
 
 ### Book — AI 备课书稿（最系统的思考）

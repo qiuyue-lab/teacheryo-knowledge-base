@@ -16,6 +16,12 @@ YoYo 的 AI × 教育 个人知识库。采用 LLM Wiki 结构，面向 AI 角�
 | [高数据文章与传播洞察](docs/data-insights.md) | 高传播力主题方向、社群趋势、9 个原创方法论框架索引 |
 | [公众号写作偏好](docs/writing-style.md) | YoYo 的文章气质、结构偏好、标题开头结尾习惯，用于公众号写作和改稿 |
 
+### Agent Skills
+
+| Skill | 内容 |
+|------|------|
+| [YoYo 小人正文配图](skills/yoyo-illustrations/) | 为中文文章生成 YoYo IP 白底手绘怪诞正文配图（16:9，基于 Ian Xiaohei 风格适配） |
+
 ### 素材来源
 
 | 目录 | 内容 | 规模 |
