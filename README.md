@@ -21,7 +21,7 @@ YoYo 的 AI × 教育 个人知识库。采用 LLM Wiki 结构，面向 AI 角�
 | 目录 | 内容 | 规模 |
 |------|------|------|
 | [sources/book/](sources/book/) | AI 备课书稿汇总版 | 前言 + 四大部分 |
-| [sources/articles/](sources/articles/) | 公众号文章（2025-2026） | 113 篇 |
+| [sources/articles/](sources/articles/) | 公众号文章（2025-2026） | 115 篇 |
 | [sources/community/](sources/community/) | 社群分享记录 | 15 期 + 黑客松 17 组 |
 | [sources/podcast/](sources/podcast/) | 小宇宙播客访谈 | 7 期 |
 | [sources/methodology/](sources/methodology/) | 课程学习范式方法论 | 5 篇 |
